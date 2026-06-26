@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #128C3E;
+  --color-secondary: #F8F4E1;
+  --color-colortext: #543310;
+  --color-star: #FFDD02;
+  --font-poppins: "Poppins", sans-serif;
+}
+
+body {
+  background: secondary;
+  min-height: 100vh;
+}
