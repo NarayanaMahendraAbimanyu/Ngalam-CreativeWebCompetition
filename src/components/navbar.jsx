@@ -20,7 +20,7 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
         className="fixed top-0 left-0 w-full z-50 flex justify-center pt-4 px-4 md:pt-6 md:px-6"
       >
-        <nav className="flex items-center justify-between w-full max-w-2xl px-4 md:px-8 py-3 md:py-4 rounded-full bg-secondary shadow-md">
+        <nav className="flex items-center justify-between w-full max-w-2xl px-4 md:px-8 py-3 md:py-4 rounded-full bg-white shadow-md">
           <Link to="/" className="text-primary font-bold text-lg md:text-xl tracking-tight font-poppins shrink-0">
             Ngalam
           </Link>
