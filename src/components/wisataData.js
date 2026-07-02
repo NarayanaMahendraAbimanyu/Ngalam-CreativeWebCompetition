@@ -8,7 +8,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Sebuah kampung di tepi Sungai Brantas yang dicat beragam warna dan dikatakan mirip dengan nuansa sebuah tempat di Brazil. Kampung ini konsisten menarik banyak wisatawan untuk berburu foto estetik.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567801"
+    noWa: "6281234567801",
+    kecamatan: "Klojen",
+    kategori: "Tematik"
   },
   {
     id: 2,
@@ -18,7 +20,9 @@ const wisataMalangLengkap = [
     jamBuka: "17.45 - 23.00 WIB",
     deskripsi: "Destinasi wisata malam terbesar di Malang yang menawarkan keindahan dekorasi lampu tematik, taman lampion, serta taman dinosaurus. Tersedia berbagai wahana permainan dari yang santai hingga memacu adrenalin.",
     tiket: { weekday: 55000, weekend: 65000 },
-    noWa: "6281234567802"
+    noWa: "6281234567802",
+    kecamatan: "Blimbing",
+    kategori: "Hiburan"
   },
   {
     id: 3,
@@ -28,7 +32,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.00 - 17.00 WIB",
     deskripsi: "Taman wisata air seluas 28.000 meter persegi dengan nuansa tropis khas Hawai. Fasilitas unggulannya meliputi Kolam Ombak Tsunami, seluncuran ekstrem Jet Coaster Slide, dan area bermain anak.",
     tiket: { weekday: 120000, weekend: 120000 },
-    noWa: "6281234567803"
+    noWa: "6281234567803",
+    kecamatan: "Blimbing",
+    kategori: "Air"
   },
   {
     id: 4,
@@ -38,7 +44,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Ruang terbuka hijau publik di pusat kota yang bisa diakses kapan pun secara bebas. Dilengkapi dengan air mancur, trek sepeda, area bermain anak, dan banyak burung merpati liar yang jinak.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567804"
+    noWa: "6281234567804",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 5,
@@ -48,7 +56,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 18.00 WIB",
     deskripsi: "Kampung wisata tematik di pusat kota yang mengusung konsep suasana Malang tempo dulu dengan bangunan-bangunan berarsitektur kolonial Belanda yang terawat rapi. Sangat cocok untuk wisata jalan kaki.",
     tiket: { weekday: 10000, weekend: 10000 },
-    noWa: "6281234567805"
+    noWa: "6281234567805",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 6,
@@ -58,7 +68,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 14.00 WIB",
     deskripsi: "Museum militer yang mengoleksi berbagai benda bersejarah hasil perjuangan rakyat Indonesia pada masa agresi militer Belanda. Ikon koleksi museum ini meliputi persenjataan perang, tank, dan Gerbong Maut.",
     tiket: { weekday: 5000, weekend: 10000 },
-    noWa: "6281234567806"
+    noWa: "6281234567806",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 7,
@@ -68,17 +80,21 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Berseberangan dengan Kampung Warna Warni, kampung ini menyuguhkan puluhan lukisan mural 3D di tembok-tembok rumah warga. Spot fotonya sangat interaktif seolah-olah menyatu dengan lukisan.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567807"
+    noWa: "6281234567807",
+    kecamatan: "Klojen",
+    kategori: "Tematik"
   },
   {
     id: 8,
-    namaWisata: "Kampung Biru Arema",
+    namaWisata: "Campung Biru Arema",
     rating: "4.4",
     jumlahUlasan: "1.850",
     jamBuka: "08.00 - 17.00 WIB",
     deskripsi: "Kampung tematik yang seluruh bangunannya dicat dengan warna biru khas klub sepak bola kebanggaan Malang, Arema. Terdapat juga berbagai mural tokoh-tokoh legenda Arema di sepanjang gang kampung.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567808"
+    noWa: "6281234567808",
+    kecamatan: "Klojen",
+    kategori: "Tematik"
   },
   {
     id: 9,
@@ -88,7 +104,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Taman ikonik berbentuk bundaran di depan Balai Kota Malang. Di tengahnya terdapat monumen Tugu yang dikelilingi kolam teratai yang mekar indah, sangat estetik terutama saat malam hari dengan lampu hiasnya.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567809"
+    noWa: "6281234567809",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 10,
@@ -98,7 +116,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.00 - 17.00 WIB",
     deskripsi: "Taman bermain dalam ruangan (indoor) terbesar di Malang yang lokasinya bersebelahan dengan Hawai Waterpark. Memiliki area seluncuran raksasa, mandi bola, dan berbagai wahana ketangkasan.",
     tiket: { weekday: 90000, weekend: 110000 },
-    noWa: "6281234567810"
+    noWa: "6281234567810",
+    kecamatan: "Blimbing",
+    kategori: "Hiburan"
   },
   {
     id: 11,
@@ -108,7 +128,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.30 - 15.00 WIB",
     deskripsi: "Museum purbakala yang menyimpan koleksi arca dan peninggalan sejarah dari masa kerajaan Kanjuruhan hingga Majapahit. Penataannya sangat modern dan rapi, menjadikannya wisata edukasi yang nyaman.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567811"
+    noWa: "6281234567811",
+    kecamatan: "Lowokwaru",
+    kategori: "Sejarah"
   },
   {
     id: 12,
@@ -118,7 +140,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 16.00 WIB",
     deskripsi: "Taman rekreasi legendaris (dahulu bernama Taman Senaputra). Menawarkan kolam renang anak, bom-bom car, komidi putar, serta panggung hiburan kesenian tradisional di akhir pekan.",
     tiket: { weekday: 15000, weekend: 20000 },
-    noWa: "6281234567812"
+    noWa: "6281234567812",
+    kecamatan: "Klojen",
+    kategori: "Hiburan"
   },
   {
     id: 13,
@@ -128,7 +152,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Taman kota yang berada tepat di seberang Stasiun Malang Kotabaru. Rindang dengan pepohonan besar, dilengkapi fasilitas tempat duduk, area bermain anak, dan air mancur cerdas.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567813"
+    noWa: "6281234567813",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 14,
@@ -138,7 +164,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 16.00 WIB",
     deskripsi: "Taman hiburan yang terletak di belakang Balai Kota Malang. Terdapat mini zoo, jogging track, dan fasilitas kolam renang yang populer di kalangan warga lokal.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567814"
+    noWa: "6281234567814",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 15,
@@ -148,7 +176,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Taman publik yang sangat luas di area barat Kota Malang. Fasilitasnya sangat lengkap, mulai dari outdoor gym, area parkour, gazebo, hingga rute refleksi telapak kaki.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567815"
+    noWa: "6281234567815",
+    kecamatan: "Lowokwaru",
+    kategori: "Taman"
   },
   {
     id: 16,
@@ -158,7 +188,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 15.00 WIB",
     deskripsi: "Candi tertua di Jawa Timur peninggalan Kerajaan Kanjuruhan. Suasananya sangat tenang dan asri, cocok untuk wisata sejarah masa Hindu-Buddha.",
     tiket: { weekday: 10000, weekend: 10000 },
-    noWa: "6281234567816"
+    noWa: "6281234567816",
+    kecamatan: "Sukun",
+    kategori: "Sejarah"
   },
   {
     id: 17,
@@ -168,7 +200,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.00 - 16.00 WIB",
     deskripsi: "Satu-satunya museum musik di Indonesia yang menyimpan koleksi puluhan ribu piringan hitam, kaset, CD, dan alat musik dari berbagai dekade.",
     tiket: { weekday: 15000, weekend: 15000 },
-    noWa: "6281234567817"
+    noWa: "6281234567817",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 18,
@@ -178,7 +212,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 15.00 WIB",
     deskripsi: "Sentra industri kerajinan keramik tertua di Malang. Pengunjung bisa membeli suvenir dan mengikuti workshop belajar membuat keramik sendiri.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567818"
+    noWa: "6281234567818",
+    kecamatan: "Lowokwaru",
+    kategori: "Edukasi"
   },
   {
     id: 19,
@@ -188,7 +224,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Taman memanjang yang dihiasi oleh ratusan lampu LED (plaza lampion) yang ditata menyala menyerupai kunang-kunang di malam hari.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567819"
+    noWa: "6281234567819",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 20,
@@ -198,7 +236,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Hidden gem di tengah permukiman dengan desain arsitektur modern memadukan unsur besi dan tanaman rambat, menciptakan lorong asri fotogenik.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567820"
+    noWa: "6281234567820",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 21,
@@ -208,7 +248,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Paru-paru Kota Malang dengan ratusan pohon besar. Tempat yang sangat ideal untuk olahraga pagi atau mencari ketenangan dari bisingnya kota.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567821"
+    noWa: "6281234567821",
+    kecamatan: "Klojen",
+    kategori: "Taman"
   },
   {
     id: 22,
@@ -218,7 +260,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 16.00 WIB",
     deskripsi: "Destinasi wisata pelestarian seni budaya Topeng Malangan. Pengunjung bisa melihat proses pembuatan topeng, belajar membatik, hingga menikmati tarian.",
     tiket: { weekday: 10000, weekend: 15000 },
-    noWa: "6281234567822"
+    noWa: "6281234567822",
+    kecamatan: "Blimbing",
+    kategori: "Budaya"
   },
   {
     id: 23,
@@ -228,7 +272,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 15.00 WIB",
     deskripsi: "Museum dedikasi sejarah salah satu perusahaan rokok terbesar asal Malang. Menampilkan artefak pembuatan tradisional hingga modern.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567823"
+    noWa: "6281234567823",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 24,
@@ -238,7 +284,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Kawasan pasar legendaris dengan kios-kios yang menjual ragam bunga hias, ikan hias, burung, dan hewan peliharaan eksotis.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567824"
+    noWa: "6281234567824",
+    kecamatan: "Klojen",
+    kategori: "Edukasi"
   },
   {
     id: 25,
@@ -248,7 +296,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 21.00 WIB",
     deskripsi: "Bangunan ibadah bersejarah peninggalan 1825 dengan arsitektur Tiongkok yang memukau. Berfungsi juga sebagai ikon wisata sejarah budaya.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567825"
+    noWa: "6281234567825",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 26,
@@ -258,7 +308,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 18.00 WIB",
     deskripsi: "Landmark peninggalan kolonial Belanda (1934) bergaya neo-gotik yang megah. Terbuka bagi wisatawan untuk mengagumi keindahan arsitekturnya.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567826"
+    noWa: "6281234567826",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 27,
@@ -268,7 +320,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Jalan protokol ikonik di Malang peninggalan Belanda, diapit pohon palem kembar dan rumah kuno. Sering digunakan untuk Car Free Day.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567827"
+    noWa: "6281234567827",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 28,
@@ -278,7 +332,9 @@ const wisataMalangLengkap = [
     jamBuka: "06.00 - 17.00 WIB",
     deskripsi: "Sumber mata air alami yang jernih dan menyegarkan di pinggiran kota. Dilengkapi dengan pepohonan rindang, cocok untuk berendam.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567828"
+    noWa: "6281234567828",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 29,
@@ -288,7 +344,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 16.00 WIB",
     deskripsi: "Kampung percontohan ekologis yang asri dipenuhi tanaman vertikal (vertical garden) dan lorong-lorong hijau di tengah pemukiman warga.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567829"
+    noWa: "6281234567829",
+    kecamatan: "Blimbing",
+    kategori: "Edukasi"
   },
   {
     id: 30,
@@ -298,7 +356,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 21.00 WIB",
     deskripsi: "Pusat seni dan budaya khas Jawa Timur. Menjadi lokasi reguler untuk festival, pameran seni, hingga pementasan wayang dan kuda lumping.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567830"
+    noWa: "6281234567830",
+    kecamatan: "Lowokwaru",
+    kategori: "Budaya"
   },
   {
     id: 31,
@@ -308,7 +368,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 15.00 WIB",
     deskripsi: "Menyajikan diorama sejarah Kota Malang, dari masa purbakala, kerajaan, kolonial, hingga era kemerdekaan.",
     tiket: { weekday: 15000, weekend: 25000 },
-    noWa: "6281234567831"
+    noWa: "6281234567831",
+    kecamatan: "Klojen",
+    kategori: "Sejarah"
   },
   {
     id: 32,
@@ -318,7 +380,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 15.00 WIB",
     deskripsi: "Fasilitas bus wisata atap terbuka gratis oleh Pemkot Malang. Wisatawan diajak berkeliling melintasi landmark sejarah di pusat kota.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567832"
+    noWa: "6281234567832",
+    kecamatan: "Klojen",
+    kategori: "Hiburan"
   },
   // --- WISATA ALAM EKSPLORASI & REKREASI MALANG RAYA ---
   {
@@ -329,7 +393,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Objek wisata alam primadona. Terkenal dengan pemandangan sunrise di penanjakan, Bukit Teletubbies, Pasir Berbisik, dan kawah ikoniknya yang aktif.",
     tiket: { weekday: 29000, weekend: 34000 },
-    noWa: "6281234567833"
+    noWa: "6281234567833",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 34,
@@ -339,7 +405,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Kawasan air terjun asri di Kabupaten Malang yang juga menawarkan wahana taman labirin, paintball, outbound, dan tubing.",
     tiket: { weekday: 15000, weekend: 18000 },
-    noWa: "6281234567834"
+    noWa: "6281234567834",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 35,
@@ -349,7 +417,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Pantai memukau dengan batu karang besar yang menyerupai pulau dan terdapat pura di atasnya, sering disamakan dengan Tanah Lot versi Malang.",
     tiket: { weekday: 10000, weekend: 15000 },
-    noWa: "6281234567835"
+    noWa: "6281234567835",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 36,
@@ -359,7 +429,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 19.00 WIB",
     deskripsi: "Destinasi perbukitan instagenic dengan hawa sejuk khas pegunungan. Cocok untuk nongkrong, ngopi, serta camping menikmati alam.",
     tiket: { weekday: 10000, weekend: 10000 },
-    noWa: "6281234567836"
+    noWa: "6281234567836",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 37,
@@ -369,7 +441,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Kawasan yang menawarkan pemandangan hamparan lahan pertanian luas dan pegunungan hijau yang sangat memanjakan mata.",
     tiket: { weekday: 5000, weekend: 5000 },
-    noWa: "6281234567837"
+    noWa: "6281234567837",
+    kecamatan: "Batu",
+    kategori: "Alam"
   },
   {
     id: 38,
@@ -379,7 +453,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Spot paralayang menantang di ketinggian 1.326 mdpl untuk menikmati lanskap kota dari atas awan. Tersedia layanan terbang tandem.",
     tiket: { weekday: 400000, weekend: 400000 },
-    noWa: "6281234567838"
+    noWa: "6281234567838",
+    kecamatan: "Batu",
+    kategori: "Alam"
   },
   {
     id: 39,
@@ -389,7 +465,9 @@ const wisataMalangLengkap = [
     jamBuka: "05.00 - 18.00 WIB",
     deskripsi: "Pesona pantai selatan dengan area bibir pantai yang luas dan pemandangan bukit di seberang yang menyerupai biawak atau buaya yang mati.",
     tiket: { weekday: 10000, weekend: 10000 },
-    noWa: "6281234567839"
+    noWa: "6281234567839",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 40,
@@ -399,7 +477,9 @@ const wisataMalangLengkap = [
     jamBuka: "06.00 - 17.00 WIB",
     deskripsi: "Wisata kebun teh nan hijau untuk merasakan udara segar, berjalan di tengah kebun, dan mengamati proses pembuatan teh di pabrik.",
     tiket: { weekday: 15000, weekend: 20000 },
-    noWa: "6281234567840"
+    noWa: "6281234567840",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 41,
@@ -409,7 +489,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 17.00 WIB",
     deskripsi: "Hamparan padang rumput hijau yang mengingatkan pada serial televisi legendaris. Sangat menyejukkan sebagai spot piknik dan healing.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567841"
+    noWa: "6281234567841",
+    kecamatan: "Batu",
+    kategori: "Alam"
   },
   {
     id: 42,
@@ -419,7 +501,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 16.00 WIB",
     deskripsi: "Sumber air tawar yang luar biasa jernih. Pengunjung bisa berenang sambil melihat keindahan tanaman ganggang di dasar air.",
     tiket: { weekday: 2000, weekend: 2000 },
-    noWa: "6281234567842"
+    noWa: "6281234567842",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 43,
@@ -429,7 +513,9 @@ const wisataMalangLengkap = [
     jamBuka: "00.00 - 23.59 WIB",
     deskripsi: "Cekungan kolam alami yang terbentuk di atas karang berbatasan langsung dengan laut lepas. Pemandangannya eksotis namun butuh ekstra tenaga untuk diakses.",
     tiket: { weekday: 10000, weekend: 10000 },
-    noWa: "6281234567843"
+    noWa: "6281234567843",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 44,
@@ -439,7 +525,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 17.00 WIB",
     deskripsi: "Taman wisata dengan konsep perkebunan bunga, spot foto bergaya pedesaan Eropa dan Korea, serta beraneka ragam wahana permainan.",
     tiket: { weekday: 25000, weekend: 30000 },
-    noWa: "6281234567844"
+    noWa: "6281234567844",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 45,
@@ -449,7 +537,9 @@ const wisataMalangLengkap = [
     jamBuka: "06.00 - 17.00 WIB",
     deskripsi: "Kawasan rekreasi yang memiliki banyak pilihan kolam renang yang airnya bersumber langsung dari mata air pegunungan alami.",
     tiket: { weekday: 30000, weekend: 35000 },
-    noWa: "6281234567845"
+    noWa: "6281234567845",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Hiburan"
   },
   {
     id: 46,
@@ -459,7 +549,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 17.00 WIB",
     deskripsi: "Perpaduan wisata alam dan edukasi budaya Jawa. Pengunjung bisa naik perahu, berenang, dan foto dengan ragam ornamen bernuansa klasik.",
     tiket: { weekday: 15000, weekend: 15000 },
-    noWa: "6281234567846"
+    noWa: "6281234567846",
+    kecamatan: "Kabupaten Malang",
+    kategori: "Alam"
   },
   {
     id: 47,
@@ -469,7 +561,9 @@ const wisataMalangLengkap = [
     jamBuka: "11.00 - 20.00 WIB",
     deskripsi: "Museum transportasi interaktif pertama dan terbesar di Asia. Menampilkan ratusan koleksi kendaraan unik dengan latar kota-kota ikonik di dunia.",
     tiket: { weekday: 100000, weekend: 120000 },
-    noWa: "6281234567847"
+    noWa: "6281234567847",
+    kecamatan: "Batu",
+    kategori: "Sejarah"
   },
   {
     id: 48,
@@ -479,7 +573,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.30 - 16.30 WIB",
     deskripsi: "Theme park ikonik yang menyuguhkan puluhan wahana permainan pemacu adrenalin serta zona edukasi sains dan kebudayaan Indonesia.",
     tiket: { weekday: 100000, weekend: 110000 },
-    noWa: "6281234567848"
+    noWa: "6281234567848",
+    kecamatan: "Batu",
+    kategori: "Hiburan"
   },
   {
     id: 49,
@@ -489,7 +585,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.30 - 17.00 WIB",
     deskripsi: "Kebun binatang modern berstandar internasional (Batu Secret Zoo) berdampingan dengan Museum Satwa yang menyimpan diorama hewan dari seluruh dunia.",
     tiket: { weekday: 140000, weekend: 170000 },
-    noWa: "6281234567849"
+    noWa: "6281234567849",
+    kecamatan: "Batu",
+    kategori: "Hiburan"
   },
   {
     id: 50,
@@ -499,7 +597,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.30 - 17.00 WIB",
     deskripsi: "Kawasan liburan keluarga modern dengan berbagai zona hiburan kekinian, seperti wahana zaman purba di Dino Park hingga Museum Musik Dunia.",
     tiket: { weekday: 140000, weekend: 160000 },
-    noWa: "6281234567850"
+    noWa: "6281234567850",
+    kecamatan: "Batu",
+    kategori: "Hiburan"
   },
   // --- WISATA KULINER LEGENDARIS ---
   {
@@ -510,7 +610,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 21.30 WIB",
     deskripsi: "Restoran dan kedai es krim tertua di Malang (berdiri 1936). Menawarkan suasana vintage kolonial yang otentik dan menu dessert legendaris.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567851"
+    noWa: "6281234567851",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 52,
@@ -520,7 +622,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 21.30 WIB",
     deskripsi: "Tempat makan bakso khas Malang yang sudah ada sejak 1977. Sensasi uniknya adalah kamu bisa bersantap persis di pinggir rel kereta api yang aktif.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567852"
+    noWa: "6281234567852",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 53,
@@ -530,7 +634,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.00 - 19.30 WIB",
     deskripsi: "Menyajikan Cwie Mie legendaris dan lumpia semarang sejak tahun 1946. Jangan lewatkan minuman khas bernama Fosco (susu dan coklat) dalam botol Coca-Cola jadul.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567853"
+    noWa: "6281234567853",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 54,
@@ -540,7 +646,9 @@ const wisataMalangLengkap = [
     jamBuka: "06.00 - 17.30 WIB",
     deskripsi: "Nasi pecel tersohor di Malang sejak 1975. Dikenal dengan bumbu pecelnya yang kental, pekat, serta kaya akan aroma kencur dan daun jeruk.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567854"
+    noWa: "6281234567854",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 55,
@@ -550,7 +658,9 @@ const wisataMalangLengkap = [
     jamBuka: "08.00 - 16.00 WIB",
     deskripsi: "Wisata kuliner di dalam Pasar Besar yang sudah beroperasi lebih dari 100 tahun (sejak 1919), menyajikan sajian klasik seperti soto, rawon, dan krengsengan.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567855"
+    noWa: "6281234567855",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 56,
@@ -560,7 +670,9 @@ const wisataMalangLengkap = [
     jamBuka: "10.30 - 22.00 WIB",
     deskripsi: "Penyedia sajian tahu telur dan tahu lontong dengan cita rasa bumbu kacang petis yang otentik. Sudah berdiri dan memanjakan lidah wisatawan sejak 1935.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567856"
+    noWa: "6281234567856",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 57,
@@ -570,7 +682,9 @@ const wisataMalangLengkap = [
     jamBuka: "09.30 - 15.30 WIB",
     deskripsi: "Kuliner berbahan dasar tempe iris yang disiram kuah santan kuning gurih. Menu andalan bagi warga maupun wisatawan yang ingin mencicipi makanan asli Malang.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567857"
+    noWa: "6281234567857",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 58,
@@ -580,7 +694,9 @@ const wisataMalangLengkap = [
     jamBuka: "07.00 - 21.00 WIB",
     deskripsi: "Beroperasi dari tahun 1927, di sini kamu bisa mencicipi onde-onde khas resep kuno dan aneka hidangan lawas seperti rawon merah dan garang asem.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567858"
+    noWa: "6281234567858",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 59,
@@ -590,7 +706,9 @@ const wisataMalangLengkap = [
     jamBuka: "18.00 - 24.00 WIB",
     deskripsi: "Destinasi kuliner yang buka sejak sore. Menghangatkan tubuh di hawa dingin kota Malang dengan semangkuk wedang ronde legendaris dan angsle manis.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567859"
+    noWa: "6281234567859",
+    kecamatan: "Klojen",
+    kategori: "Kuliner"
   },
   {
     id: 60,
@@ -600,7 +718,9 @@ const wisataMalangLengkap = [
     jamBuka: "15.00 - 24.00 WIB",
     deskripsi: "Tempat nongkrong malam ikonik yang menyajikan ketan punel dipadu belasan ragam topping manis dan gurih, dari bubuk kedelai hingga durian utuh.",
     tiket: { weekday: 0, weekend: 0 },
-    noWa: "6281234567860"
+    noWa: "6281234567860",
+    kecamatan: "Batu",
+    kategori: "Kuliner"
   }
 ];
 
@@ -614,5 +734,7 @@ export const wisataData = wisataMalangLengkap.map((item) => ({
   jamBuka: item.jamBuka,
   priceWeekday: item.tiket.weekday,
   priceWeekend: item.tiket.weekend,
-  waNumber: item.noWa
+  waNumber: item.noWa,
+  kecamatan: item.kecamatan,
+  kategori: item.kategori
 }));

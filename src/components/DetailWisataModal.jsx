@@ -105,12 +105,22 @@ const DetailWisataModal = ({ wisata, onClose }) => {
             {wisata.name}
           </h2>
           
+          {/* Tambahan: Tag Wilayah & Kategori Sinkron dengan Filter */}
+          <div className="flex flex-wrap gap-2 -mt-2">
+            <span className={`bg-[#F8F4E1]/20 border border-[#F8F4E1]/30 text-[#F8F4E1] px-3 py-1 rounded-full backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'}`}>
+              📍 Wilayah {wisata.kecamatan}
+            </span>
+            <span className={`bg-[#FFDD02]/20 border border-[#FFDD02]/30 text-[#FFDD02] font-semibold px-3 py-1 rounded-full backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'}`}>
+              🏷️ {wisata.kategori}
+            </span>
+          </div>
+
           {/* Rating - Clickable to Google */}
           <a 
             href={`https://www.google.com/search?q=${encodeURIComponent(wisata.name + " Malang")}`} 
             target="_blank" 
             rel="noreferrer"
-            className={`flex items-center gap-4 bg-[#128C3E]/50 rounded-xl border border-[#128C3E]/70 hover:bg-[#128C3E] transition-all duration-700 cursor-pointer group shadow-sm ${isFullscreen ? 'p-4' : 'p-3'}`}
+            className={`flex items-center gap-4 bg-[#128C3E]/50 rounded-xl border border-[#128C3E]/70 hover:bg-[#128C3E] transition-all duration-700 cursor-pointer group shadow-sm ${isFullscreen ? 'p-4 mt-2' : 'p-3 mt-1'}`}
           >
             <div className={`flex items-center gap-1 text-[#FFDD02] font-bold group-hover:scale-105 transition-transform ${isFullscreen ? 'text-3xl' : 'text-2xl'}`}>
               {wisata.rate} <span className={`${isFullscreen ? 'text-3xl' : 'text-2xl'} -mt-1`}>★</span> <span className={`text-[#F8F4E1] ml-1 ${isFullscreen ? 'text-base' : 'text-sm'}`}>Google</span>
