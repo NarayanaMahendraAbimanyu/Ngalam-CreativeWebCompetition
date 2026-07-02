@@ -1,116 +1,453 @@
 import React, { useState } from 'react';
-import { wisataData } from '../components/wisataData'; // Sesuaikan path ini jika perlu
-import DetailWisataModal from '../components/DetailWisataModal'; // Sesuaikan path ini jika perlu
+import { wisataData } from '../components/wisataData'; // Sesuaikan path jika perlu
+import DetailWisataModal from '../components/DetailWisataModal'; // Sesuaikan path jika perlu
+
+// Import Leaflet untuk Peta Asli
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import L from 'leaflet';
 
 const WisataPage = () => {
   const [selectedWisata, setSelectedWisata] = useState(null);
   
-  // Pagination Logic
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(wisataData.length / itemsPerPage);
+  // Logic "Lihat Lebih Banyak" (Load More)
+  const [visibleCount, setVisibleCount] = useState(6); // Menampilkan 6 data awal
+  const itemsToLoad = 6; // Jumlah data yang ditambah saat tombol diklik
 
-  const handleNext = () => {
-    if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
+  // States untuk Pencarian dan Filter Utama
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterHarga, setFilterHarga] = useState('');
+  const [filterKecamatan, setFilterKecamatan] = useState('');
+  const [filterKategori, setFilterKategori] = useState('');
+  const [filterRating, setFilterRating] = useState(''); // State untuk Rating
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // State untuk Toggle Menu Filter
+
+  // State untuk Peta Interaktif Wilayah (Default ke Klojen)
+  const [selectedMapRegion, setSelectedMapRegion] = useState('Klojen');
+
+  const handleLoadMore = () => {
+    setVisibleCount(prevCount => prevCount + itemsToLoad);
   };
 
-  const handlePrev = () => {
-    if (currentPage > 0) setCurrentPage(currentPage - 1);
+  // Fungsi Scroll Otomatis ke Bagian Peta
+  const scrollToMap = () => {
+    const mapSection = document.getElementById('interactive-map-section');
+    if (mapSection) {
+      mapSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
-  // Logic indikator titik (Maksimal 5 titik)
-  const maxDots = 5;
-  const dotGroupIndex = Math.floor(currentPage / maxDots);
-  const startDot = dotGroupIndex * maxDots;
-  
-  const visibleDots = Array.from({ length: maxDots }, (_, i) => startDot + i).filter(dot => dot < totalPages);
-  const currentData = wisataData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  // Proses Filter Data Utama berdasarkan input pengguna
+  const filteredWisata = wisataData.filter((wisata) => {
+    const matchesSearch = wisata.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          wisata.desc.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesKecamatan = filterKecamatan === '' || wisata.kecamatan === filterKecamatan;
+    const matchesKategori = filterKategori === '' || wisata.kategori === filterKategori;
+    const matchesRating = filterRating === '' || parseFloat(wisata.rate) >= parseFloat(filterRating);
+    
+    // Logika Filter Rentang Harga
+    let matchesHarga = true;
+    const hargaTertinggi = Math.max(wisata.priceWeekday, wisata.priceWeekend);
+    if (filterHarga === 'gratis') {
+      matchesHarga = hargaTertinggi === 0;
+    } else if (filterHarga === 'murah') {
+      matchesHarga = hargaTertinggi > 0 && hargaTertinggi <= 20000;
+    } else if (filterHarga === 'sedang') {
+      matchesHarga = hargaTertinggi > 20000 && hargaTertinggi <= 75000;
+    } else if (filterHarga === 'premium') {
+      matchesHarga = hargaTertinggi > 75000;
+    }
+
+    return matchesSearch && matchesKecamatan && matchesKategori && matchesHarga && matchesRating;
+  });
+
+  // Memotong data hasil filter sesuai jumlah muat data yang diizinkan untuk tampil
+  const currentData = filteredWisata.slice(0, visibleCount);
+
+  // Mengambil data khusus untuk ditampilkan pada list wilayah peta interaktif
+  const mapRegionData = wisataData.filter(wisata => wisata.kecamatan === selectedMapRegion);
+
+  // === DATA REGIONAL UNTUK REAL MAP ===
+  const mapRegions = [
+    { id: 'Klojen', name: 'Klojen (Pusat)', center: [-7.9771, 112.6340] },
+    { id: 'Blimbing', name: 'Blimbing', center: [-7.9350, 112.6470] },
+    { id: 'Lowokwaru', name: 'Lowokwaru', center: [-7.9400, 112.6100] },
+    { id: 'Sukun', name: 'Sukun', center: [-7.9950, 112.6150] },
+    { id: 'Batu', name: 'Kota Batu', center: [-7.8671, 112.5239] },
+    { id: 'Kabupaten Malang', name: 'Kab. Malang', center: [-8.1320, 112.5700] },
+  ];
+
+  // Custom UI Marker Icon untuk Leaflet
+  const getCustomIcon = (regionName, isSelected) => {
+    const bgColor = isSelected ? '#FFDD02' : '#128C3E';
+    const textColor = isSelected ? '#543310' : '#F8F4E1';
+    const scale = isSelected ? 'scale(1.15) translateY(-5px)' : 'scale(1)';
+    const zIndex = isSelected ? 1000 : 1;
+
+    return L.divIcon({
+      className: 'bg-transparent border-none', // Menghapus styling bawaan Leaflet
+      html: `
+        <div style="
+          background-color: ${bgColor};
+          color: ${textColor};
+          padding: 8px 16px;
+          border-radius: 30px;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 800;
+          font-size: 13px;
+          border: 3px solid #F8F4E1;
+          box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+          white-space: nowrap;
+          transform: ${scale};
+          transition: transform 0.3s ease, background-color 0.3s ease;
+          position: relative;
+          z-index: ${zIndex};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          📍 ${regionName}
+        </div>
+      `,
+      iconSize: [0, 0], // Otomatis menyesuaikan isi div HTML
+      iconAnchor: [50, 20] // Menjangkar posisi titik kordinat tepat ke tengah
+    });
+  };
 
   return (
     <>
+      {/* Import CSS Utama Leaflet langsung dari CDN agar tidak repot setup */}
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
           .font-poppins { font-family: 'Poppins', sans-serif; }
+          
+          /* Efek Kaca (Glassmorphism) */
+          .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          }
+          .glassmorphism-dark {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+          }
+
+          /* Kustomisasi UI Peta Asli Leaflet agar selaras dengan desain Web */
+          .leaflet-container {
+            font-family: 'Poppins', sans-serif;
+            background-color: #E5E5E5; 
+            z-index: 10;
+          }
+          .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3) !important;
+            margin-top: 20px !important;
+            margin-left: 20px !important;
+          }
+          .leaflet-control-zoom a {
+            background-color: #F8F4E1 !important;
+            color: #543310 !important;
+            border-bottom: 1px solid rgba(84, 51, 16, 0.2) !important;
+          }
+          .leaflet-control-zoom a:hover {
+            background-color: #FFDD02 !important;
+          }
+          .leaflet-control-attribution {
+            display: none; /* Menyembunyikan teks copyright map agar clean */
+          }
+          
+          /* Custom Scrollbar untuk bagian List Daerah */
+          .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+          .custom-scrollbar::-webkit-scrollbar-track { background: rgba(248,244,225,0.1); border-radius: 10px; }
+          .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(248,244,225,0.3); border-radius: 10px; }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,221,2,0.6); }
         `}
       </style>
+      
       <div className="min-h-screen bg-[#F8F4E1] p-8 font-poppins">
         
-        {/* Header */}
+        {/* Header Section */}
         <div className="text-center mb-10 mt-24">
           <h1 className="text-4xl font-extrabold text-[#543310] mb-4">
             <span className="text-[#128C3E]">Wisata</span> Malang
           </h1>
-          <p className="text-[#543310] max-w-2xl mx-auto opacity-80 text-sm md:text-base">
+          <p className="text-[#543310] max-w-2xl mx-auto opacity-80 text-sm md:text-base mb-8">
             Kota Malang merupakan kota terbesar kedua di Jawa Timur setelah Surabaya. Sebagai pusat ekonomi dan sosial di wilayah bagian selatan Jawa Timur.
           </p>
-        </div>
 
-        {/* Grid Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {currentData.map((wisata) => (
-            <div key={wisata.id} className="bg-[#543310] rounded-2xl overflow-hidden flex flex-col p-3 shadow-lg transition-transform hover:-translate-y-1">
-              
-              {/* Image Placeholder */}
-              <div className="bg-[#128C3E] w-full h-48 rounded-xl mb-4 flex items-center justify-center">
-                 <span className="text-[#F8F4E1] font-bold opacity-70 text-center px-4">{wisata.name} Image</span>
-              </div>
-              
-              {/* Info Area */}
-              <div className="flex justify-between items-center mb-2 px-1">
-                <h3 className="text-[#F8F4E1] font-bold text-lg leading-tight w-3/4">{wisata.name}</h3>
-                <div className="flex items-center gap-1">
-                  <span className="text-[#FFDD02] font-bold text-lg">{wisata.rate}</span>
-                  <span className="text-[#FFDD02] text-xl leading-none -mt-1">★</span>
-                </div>
-              </div>
-              
-              <p className="text-[#F8F4E1] text-xs md:text-sm mb-6 px-1 line-clamp-2 opacity-80">
-                {wisata.desc}
-              </p>
-              
-              <div className="mt-auto flex justify-center pb-2">
+          {/* Fitur Search & Master Filter Dropdown */}
+          <div className="max-w-4xl mx-auto relative z-20">
+            {/* Main Bar (Search + Tombol Toggle Filter + Tombol Peta) */}
+            <div className="bg-[#543310] p-2 md:p-3 rounded-full shadow-xl flex flex-col md:flex-row items-center gap-2 md:gap-3">
+              <input 
+                type="text"
+                placeholder="Cari destinasi wisata idamanmu di sini..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-6 py-3 rounded-full bg-[#F8F4E1] text-[#543310] font-medium outline-none placeholder-[#543310]/60 shadow-inner flex-1"
+              />
+              <div className="flex w-full md:w-auto gap-2">
                 <button 
-                  onClick={() => setSelectedWisata(wisata)}
-                  className="bg-[#128C3E] hover:bg-green-700 text-[#F8F4E1] font-semibold py-2 px-6 rounded-full text-sm flex items-center gap-2 transition-colors"
+                  onClick={() => setIsFilterOpen(!isFilterOpen)}
+                  className={`px-6 py-3 rounded-full font-bold transition-all flex items-center justify-center gap-2 flex-1 md:flex-none ${isFilterOpen ? 'bg-[#FFDD02] text-[#543310]' : 'bg-[#F8F4E1] text-[#543310] hover:bg-white'}`}
                 >
-                  Lihat Selengkapnya <span className="font-bold">&gt;</span>
+                  ⚙️ Filter
+                </button>
+                <button
+                  onClick={scrollToMap}
+                  className="bg-[#128C3E] text-[#F8F4E1] px-6 py-3 rounded-full hover:bg-green-700 shadow-md font-bold whitespace-nowrap flex items-center justify-center gap-2 flex-1 md:flex-none transition-colors"
+                >
+                  🗺️ Lihat Lewat Peta Interaktif
                 </button>
               </div>
             </div>
-          ))}
+
+            {/* PANEL MEGA DROPDOWN FILTER */}
+            {isFilterOpen && (
+              <div className="absolute top-20 md:top-24 left-0 right-0 bg-[#F8F4E1] border-2 border-[#543310] p-6 rounded-3xl shadow-2xl z-50 animate-in fade-in zoom-in duration-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                  
+                  {/* Kolom 1 */}
+                  <div className="space-y-4">
+                    <label className="text-[#543310] font-bold text-sm block border-b border-[#543310]/20 pb-1">Kategori & Wilayah</label>
+                    <select 
+                      value={filterKecamatan}
+                      onChange={(e) => setFilterKecamatan(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#543310]/20 text-[#543310] font-semibold text-sm outline-none cursor-pointer"
+                    >
+                      <option value="">📍 Semua Wilayah</option>
+                      <option value="Klojen">Klojen</option>
+                      <option value="Blimbing">Blimbing</option>
+                      <option value="Lowokwaru">Lowokwaru</option>
+                      <option value="Sukun">Sukun</option>
+                      <option value="Batu">Kota Batu</option>
+                      <option value="Kabupaten Malang">Kabupaten Malang</option>
+                    </select>
+
+                    <select
+                      value={filterKategori}
+                      onChange={(e) => setFilterKategori(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#543310]/20 text-[#543310] font-semibold text-sm outline-none cursor-pointer"
+                    >
+                      <option value="">🏷️ Semua Kategori</option>
+                      <option value="Alam">Wisata Alam</option>
+                      <option value="Kuliner">Kuliner Legendaris</option>
+                      <option value="Sejarah">Sejarah &amp; Museum</option>
+                      <option value="Taman">Taman Kota</option>
+                      <option value="Tematik">Kampung Tematik</option>
+                      <option value="Hiburan">Wahana Hiburan</option>
+                      <option value="Air">Wahana Air</option>
+                      <option value="Budaya">Kebudayaan</option>
+                      <option value="Edukasi">Edukasi</option>
+                    </select>
+                  </div>
+
+                  {/* Kolom 2 */}
+                  <div className="space-y-4">
+                    <label className="text-[#543310] font-bold text-sm block border-b border-[#543310]/20 pb-1">Detail Opsional</label>
+                    <select
+                      value={filterHarga}
+                      onChange={(e) => setFilterHarga(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#543310]/20 text-[#543310] font-semibold text-sm outline-none cursor-pointer"
+                    >
+                      <option value="">💰 Semua Harga</option>
+                      <option value="gratis">Gratis / Rp 0</option>
+                      <option value="murah">Murah (≤ Rp 20rb)</option>
+                      <option value="sedang">Sedang (Rp 20rb - Rp 75rb)</option>
+                      <option value="premium">Premium (&gt; Rp 75rb)</option>
+                    </select>
+
+                    <select
+                      value={filterRating}
+                      onChange={(e) => setFilterRating(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#543310]/20 text-[#543310] font-semibold text-sm outline-none cursor-pointer"
+                    >
+                      <option value="">⭐ Semua Rating (Min)</option>
+                      <option value="4">4.0 ke atas</option>
+                      <option value="4.5">4.5 ke atas</option>
+                      <option value="4.8">4.8 ke atas</option>
+                    </select>
+                  </div>
+
+                </div>
+
+                <button 
+                  onClick={() => setIsFilterOpen(false)}
+                  className="mt-6 w-full bg-[#128C3E] text-[#F8F4E1] hover:bg-green-700 font-bold py-3 px-4 rounded-xl text-sm transition-colors shadow-md"
+                >
+                  Terapkan Filter
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Slider Controls & Dots */}
-        <div className="flex justify-center items-center mt-12 gap-6">
-          <button 
-            onClick={handlePrev}
-            disabled={currentPage === 0}
-            className={`w-10 h-10 rounded-full font-bold flex items-center justify-center transition-colors ${currentPage === 0 ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-[#543310] text-[#F8F4E1] hover:bg-yellow-900'}`}
-          >
-            &lt;
-          </button>
-          
-          <div className="flex gap-2">
-            {visibleDots.map(dotIndex => (
-              <button 
-                key={dotIndex}
-                onClick={() => setCurrentPage(dotIndex)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${currentPage === dotIndex ? 'bg-[#543310] scale-125' : 'bg-gray-400 hover:bg-gray-500'}`}
-              />
+        {/* Grid Cards Utama */}
+        {currentData.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto z-0 relative">
+            {currentData.map((wisata) => (
+              <div key={wisata.id} className="bg-[#543310] rounded-2xl overflow-hidden flex flex-col p-3 shadow-lg transition-transform hover:-translate-y-1">
+                
+                {/* Image Placeholder */}
+                <div className="bg-[#128C3E] w-full h-48 rounded-xl mb-4 flex items-center justify-center">
+                   <span className="text-[#F8F4E1] font-bold opacity-70 text-center px-4">{wisata.name} Image</span>
+                </div>
+                
+                {/* Info Area */}
+                <div className="flex justify-between items-center mb-2 px-1">
+                  <h3 className="text-[#F8F4E1] font-bold text-lg leading-tight w-3/4">{wisata.name}</h3>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[#FFDD02] font-bold text-lg">{wisata.rate}</span>
+                    <span className="text-[#FFDD02] text-xl leading-none -mt-1">★</span>
+                  </div>
+                </div>
+                
+                {/* Tag Detail Region & Category */}
+                <div className="flex gap-2 mb-3 px-1 text-[10px]">
+                  <span className="bg-[#F8F4E1]/20 text-[#F8F4E1] px-2 py-0.5 rounded-md">{wisata.kecamatan}</span>
+                  <span className="bg-[#FFDD02]/20 text-[#FFDD02] px-2 py-0.5 rounded-md">{wisata.kategori}</span>
+                </div>
+
+                <p className="text-[#F8F4E1] text-xs md:text-sm mb-6 px-1 line-clamp-2 opacity-80">
+                  {wisata.desc}
+                </p>
+                
+                <div className="mt-auto flex justify-center pb-2">
+                  <button 
+                    onClick={() => setSelectedWisata(wisata)}
+                    className="bg-[#128C3E] hover:bg-green-700 text-[#F8F4E1] font-semibold py-2 px-6 rounded-full text-sm flex items-center gap-2 transition-colors"
+                  >
+                    Lihat Selengkapnya <span className="font-bold">&gt;</span>
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
+        ) : (
+          <div className="text-center py-12 max-w-xl mx-auto">
+            <p className="text-[#543310] font-bold text-lg opacity-70">
+              Maaf, destinasi wisata yang kamu cari dengan kombinasi filter tersebut tidak dapat ditemukan. Coba ubah pencarian atau katagori filtermu.
+            </p>
+          </div>
+        )}
 
-          <button 
-            onClick={handleNext}
-            disabled={currentPage === totalPages - 1}
-            className={`w-10 h-10 rounded-full font-bold flex items-center justify-center transition-colors ${currentPage === totalPages - 1 ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-[#543310] text-[#F8F4E1] hover:bg-yellow-900'}`}
-          >
-            &gt;
-          </button>
+        {/* Tombol Lihat Lebih Banyak */}
+        {visibleCount < filteredWisata.length && (
+          <div className="flex justify-center items-center mt-12 mb-16">
+            <button 
+              onClick={handleLoadMore}
+              className="bg-[#543310] text-[#F8F4E1] hover:bg-yellow-900 font-bold py-3 px-8 rounded-full transition-colors shadow-md flex items-center gap-2"
+            >
+              Tampilkan Lebih Banyak
+            </button>
+          </div>
+        )}
+
+        {/* =========================================
+            SECTION PETA GEOGRAFIS ASLI (LEAFLET) 
+            ========================================= */}
+        <div id="interactive-map-section" className="mt-24 max-w-[1400px] mx-auto pt-14 border-t-2 border-[#543310]/10">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#543310] mb-3">Peta Asli Interaktif Malang Raya</h2>
+            <p className="text-[#543310]/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
+              Geser, Zoom, dan Klik titik wilayah pada peta dunia nyata di bawah ini untuk melihat koleksi wisata memukau di daerah tersebut!
+            </p>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start h-auto lg:h-[600px] w-full">
+            
+            {/* CONTAINER KIRI: REAL MAP LEAFLET */}
+            <div className="w-full lg:w-2/3 h-[450px] lg:h-full rounded-3xl overflow-hidden shadow-2xl relative border-4 border-[#543310] bg-[#E5E5E5]">
+              {/* Note: Coordinate berpusat di Kota Malang */}
+              <MapContainer 
+                center={[-7.9666, 112.6326]} 
+                zoom={11} 
+                scrollWheelZoom={true} // Memungkinkan UX zooming pakai mouse
+                className="w-full h-full"
+              >
+                {/* Memakai Base Layer Peta yang estetis dan terang (mirip warna F8F4E1) */}
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                />
+
+                {/* Looping memunculkan Marker/Pin Wilayah Interaktif */}
+                {mapRegions.map((region) => (
+                  <Marker 
+                    key={region.id} 
+                    position={region.center}
+                    icon={getCustomIcon(region.name, selectedMapRegion === region.id)}
+                    eventHandlers={{
+                      click: () => {
+                        setSelectedMapRegion(region.id);
+                      },
+                    }}
+                  />
+                ))}
+              </MapContainer>
+            </div>
+
+            {/* CONTAINER KANAN: PANEL GLASSMORPHISM LIST WISATA */}
+            <div className="w-full lg:w-1/3 bg-[#543310] p-6 rounded-3xl shadow-xl h-[450px] lg:h-full flex flex-col relative overflow-hidden">
+              {/* Background Dekorasi Artistik agar tidak plain */}
+              <div className="absolute top-[-50px] right-[-50px] w-48 h-48 bg-[#128C3E] rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+              <div className="absolute bottom-[-50px] left-[-50px] w-48 h-48 bg-[#FFDD02] rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+              <div className="mb-6 border-b border-[#F8F4E1]/20 pb-4 relative z-10">
+                <span className="text-xs font-bold text-[#FFDD02] tracking-widest block mb-2 uppercase">WILAYAH TERPILIH PADA PETA</span>
+                <h3 className="text-2xl font-bold text-[#F8F4E1] flex items-center gap-2">
+                  📍 {selectedMapRegion}
+                </h3>
+                <p className="text-sm text-[#F8F4E1]/80 mt-1">Ditemukan {mapRegionData.length} destinasi unggulan</p>
+              </div>
+
+              {/* Area Daftar Kartu Glassmorphism (Scrollable) */}
+              <div className="flex-1 overflow-y-auto pr-3 space-y-4 custom-scrollbar relative z-10 pb-4">
+                {mapRegionData.map((wisata) => (
+                  <div 
+                    key={`map-list-${wisata.id}`}
+                    onClick={() => setSelectedWisata(wisata)}
+                    className="glassmorphism hover:glassmorphism-dark p-4 rounded-2xl cursor-pointer transition-all duration-300 flex items-center gap-4 group hover:translate-x-1"
+                  >
+                    {/* Thumbnail Bulat */}
+                    <div className="w-16 h-16 rounded-xl bg-[#128C3E] flex-shrink-0 flex items-center justify-center text-[8px] text-[#F8F4E1] font-bold text-center px-1 shadow-inner group-hover:scale-105 transition-transform">
+                      {wisata.name.substring(0, 15)}...
+                    </div>
+                    
+                    {/* Teks Informasi */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <h4 className="text-[#F8F4E1] font-bold text-sm truncate group-hover:text-[#FFDD02] transition-colors">{wisata.name}</h4>
+                        <div className="flex items-center gap-0.5 flex-shrink-0 ml-2 bg-[#F8F4E1]/10 px-2 py-0.5 rounded-full">
+                          <span className="text-[#FFDD02] font-bold text-xs">{wisata.rate}</span>
+                          <span className="text-[#FFDD02] text-xs">★</span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] bg-[#128C3E]/50 text-[#F8F4E1] px-2 py-0.5 rounded-md inline-block mb-1">{wisata.kategori}</span>
+                      <p className="text-[#F8F4E1]/70 text-xs line-clamp-1 italic">
+                        {wisata.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                
+                {mapRegionData.length === 0 && (
+                  <div className="text-center mt-10 opacity-60">
+                    <p className="text-[#F8F4E1] text-sm">Belum ada destinasi di sistem untuk wilayah ini.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
         </div>
+        {/* ========================================= */}
 
-        {/* Pop Up Detail Wisata */}
+        {/* Pop Up Detail Wisata Modal */}
         {selectedWisata && (
           <DetailWisataModal 
             wisata={selectedWisata} 

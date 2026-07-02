@@ -244,9 +244,8 @@ export default function Hero() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-block text-sm font-poppins text-colortext bg-white/60 backdrop-blur-sm px-4 py-3 rounded-full mb-2 shadow"
+              className="inline-block text-sm font-poppins text-colortext px-4 py-3 rounded-full mb-2 shadow"
             >
-              #2 Kota terbesar di Jawa Timur, Indonesia
             </motion.span>
 
             <motion.h1
