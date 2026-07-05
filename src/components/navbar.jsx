@@ -11,6 +11,7 @@ const menuItems = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [hoveredPath, setHoveredPath] = useState(null);
 
   return (
     <>
@@ -25,11 +26,19 @@ export default function Navbar() {
             Ngalam
           </Link>
 
-          <div className="hidden md:flex items-center gap-1 md:gap-2">
+          {/* 
+            PERBAIKAN: onMouseLeave dipindah ke parent container (div) 
+            agar efek hover tidak terputus (menjadi null) saat berpindah antar link.
+          */}
+          <div 
+            className="hidden md:flex items-center gap-1 md:gap-2 relative"
+            onMouseLeave={() => setHoveredPath(null)}
+          >
             {menuItems.map((item) => (
               <NavLink
                 key={item.label}
                 to={item.to}
+                onMouseEnter={() => setHoveredPath(item.to)}
                 className={({ isActive }) =>
                   isActive
                     ? "relative px-2.5 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium font-poppins text-white z-10"
@@ -38,10 +47,24 @@ export default function Navbar() {
               >
                 {({ isActive }) => (
                   <>
+                    {/* Pill untuk menu yang sedang aktif diklik/dikunjungi */}
                     {isActive && (
                       <motion.div
                         layoutId="active-pill"
                         className="absolute inset-0 bg-primary rounded-xl"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+
+                    {/* 
+                      PERBAIKAN: Syarat !isActive dihapus agar layoutId 'hover-pill'
+                      tidak pernah unmount (hilang) saat melewati menu aktif, 
+                      memastikan transisi kursor selalu mulus 100%. 
+                    */}
+                    {hoveredPath === item.to && (
+                      <motion.div
+                        layoutId="hover-pill"
+                        className="absolute inset-0 bg-primary/15 rounded-xl"
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
@@ -83,6 +106,7 @@ export default function Navbar() {
         </nav>
       </motion.div>
 
+      {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -118,6 +142,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
+      {/* Mobile Menu Backdrop */}
       <AnimatePresence>
         {open && (
           <motion.div
