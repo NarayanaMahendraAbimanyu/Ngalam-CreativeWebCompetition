@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { wisataData } from '../components/wisataData'; // Sesuaikan path jika perlu
 import DetailWisataModal from '../components/DetailWisataModal'; // Sesuaikan path jika perlu
+import FooterWisata from '../components/footer'; // Import komponen Footer Baru
 
 // Import Leaflet untuk Peta Asli
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
@@ -9,7 +10,7 @@ import L from 'leaflet';
 const WisataPage = () => {
   const [selectedWisata, setSelectedWisata] = useState(null);
   
-  // Logic "Lihat Lebih Banyak" (Load More)
+  // Logic "Lihat Lebih Banyak" (Load More) dan "Lihat Lebih Sedikit"
   const [visibleCount, setVisibleCount] = useState(6); // Menampilkan 6 data awal
   const itemsToLoad = 6; // Jumlah data yang ditambah saat tombol diklik
 
@@ -24,8 +25,18 @@ const WisataPage = () => {
   // State untuk Peta Interaktif Wilayah (Default ke Klojen)
   const [selectedMapRegion, setSelectedMapRegion] = useState('Klojen');
 
-  const handleLoadMore = () => {
-    setVisibleCount(prevCount => prevCount + itemsToLoad);
+  // Menggabungkan fungsi Load More dan Reset Less
+  const handleToggleVisibleCount = () => {
+    if (visibleCount >= filteredWisata.length) {
+      // Jika sudah maksimal, ciptakan efek animasi menutup dengan smooth scroll kembali ke atas grid
+      setVisibleCount(6);
+      const gridSection = document.getElementById('main-cards-section');
+      if (gridSection) {
+        gridSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      setVisibleCount(prevCount => prevCount + itemsToLoad);
+    }
   };
 
   // Fungsi Scroll Otomatis ke Bagian Peta
@@ -166,10 +177,26 @@ const WisataPage = () => {
           .custom-scrollbar::-webkit-scrollbar-track { background: rgba(248,244,225,0.1); border-radius: 10px; }
           .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(248,244,225,0.3); border-radius: 10px; }
           .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,221,2,0.6); }
+
+          /* Animasi Kartu Wisata Masuk (Fade In Up) */
+          @keyframes fadeInUp {
+            0% {
+              opacity: 0;
+              transform: translateY(30px) scale(0.95);
+            }
+            100% {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
+
+          .animate-card-view {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+          }
         `}
       </style>
       
-      <div className="min-h-screen bg-[#F8F4E1] p-8 font-poppins">
+      <div id="main-cards-section" className="min-h-screen bg-[#F8F4E1] p-8 font-poppins">
         
         {/* Header Section */}
         <div className="text-center mb-10 mt-24">
@@ -290,12 +317,19 @@ const WisataPage = () => {
         {/* Grid Cards Utama */}
         {currentData.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto z-0 relative">
-            {currentData.map((wisata) => (
-              <div key={wisata.id} className="bg-[#543310] rounded-2xl overflow-hidden flex flex-col p-3 shadow-lg transition-transform hover:-translate-y-1">
+            {currentData.map((wisata, index) => (
+              <div 
+                key={`${wisata.id}-${visibleCount}`} 
+                className="animate-card-view bg-[#543310] rounded-2xl overflow-hidden flex flex-col p-3 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-transparent hover:border-[#FFDD02]/30"
+                style={{
+                  animationDelay: `${(index % itemsToLoad) * 80}ms` // Efek staggered animation yang rapi per baris data baru
+                }}
+              >
                 
                 {/* Image Placeholder */}
-                <div className="bg-[#128C3E] w-full h-48 rounded-xl mb-4 flex items-center justify-center">
-                   <span className="text-[#F8F4E1] font-bold opacity-70 text-center px-4">{wisata.name} Image</span>
+                <div className="bg-[#128C3E] w-full h-48 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden group">
+                   <span className="text-[#F8F4E1] font-bold opacity-70 text-center px-4 z-10">{wisata.name} Image</span>
+                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 
                 {/* Info Area */}
@@ -320,7 +354,7 @@ const WisataPage = () => {
                 <div className="mt-auto flex justify-center pb-2">
                   <button 
                     onClick={() => setSelectedWisata(wisata)}
-                    className="bg-[#128C3E] hover:bg-green-700 text-[#F8F4E1] font-semibold py-2 px-6 rounded-full text-sm flex items-center gap-2 transition-colors"
+                    className="bg-[#128C3E] hover:bg-green-700 text-[#F8F4E1] font-semibold py-2 px-6 rounded-full text-sm flex items-center gap-2 transition-colors shadow-md"
                   >
                     Lihat Selengkapnya <span className="font-bold">&gt;</span>
                   </button>
@@ -336,14 +370,28 @@ const WisataPage = () => {
           </div>
         )}
 
-        {/* Tombol Lihat Lebih Banyak */}
-        {visibleCount < filteredWisata.length && (
+        {/* Tombol Lihat Lebih Banyak / Lebih Sedikit */}
+        {filteredWisata.length > 6 && (
           <div className="flex justify-center items-center mt-12 mb-16">
             <button 
-              onClick={handleLoadMore}
-              className="bg-[#543310] text-[#F8F4E1] hover:bg-yellow-900 font-bold py-3 px-8 rounded-full transition-colors shadow-md flex items-center gap-2"
+              onClick={handleToggleVisibleCount}
+              className={`text-[#F8F4E1] font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-md flex items-center gap-2 transform active:scale-95 ${
+                visibleCount >= filteredWisata.length 
+                  ? 'bg-[#128C3E] hover:bg-green-700 hover:shadow-emerald-900/30' 
+                  : 'bg-[#543310] hover:bg-amber-900 hover:shadow-amber-950/40'
+              }`}
             >
-              Tampilkan Lebih Banyak
+              {visibleCount >= filteredWisata.length ? (
+                <>
+                  <span>Tampilkan Lebih Sedikit</span>
+                  <span className="text-sm">▲</span>
+                </>
+              ) : (
+                <>
+                  <span>Tampilkan Lebih Banyak</span>
+                  <span className="text-sm">▼</span>
+                </>
+              )}
             </button>
           </div>
         )}
@@ -359,7 +407,7 @@ const WisataPage = () => {
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start h-auto lg:h-[600px] w-full">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start h-auto lg:h-[600px] w-full mb-16">
             
             {/* CONTAINER KIRI: REAL MAP LEAFLET */}
             <div className="w-full lg:w-2/3 h-[450px] lg:h-full rounded-3xl overflow-hidden shadow-2xl relative border-4 border-[#543310] bg-[#E5E5E5]">
@@ -456,6 +504,9 @@ const WisataPage = () => {
         )}
 
       </div>
+
+      {/* Footer Wisata Profesional & Modern Terpisah */}
+      <FooterWisata />
     </>
   );
 };

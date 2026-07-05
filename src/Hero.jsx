@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 import AboutSlider from "./components/aboutSlider";
+import Footer from "./components/footer";
 import malangCity from "./assets/malang_city.png";
 import cloud from "./assets/cloud.png";
 
@@ -230,14 +231,139 @@ function FadeInWhenVisible({ children, delay = 0, direction = "up" }) {
 
 export default function Hero() {
   const sectionDuaRef = useRef(null);
+  const canvasRef = useRef(null);
+  // Menyimpan posisi kursor tanpa re-render state untuk performa yang lebih baik
+  const mouse = useRef({ x: -1000, y: -1000 });
+
+  // Efek untuk memastikan scroll berada di paling atas (posisi 0) saat load/reload/pindah page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const scrollToSectionDua = () => {
     sectionDuaRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let animationFrameId;
+    let dots = [];
+
+    // Pengaturan pola dan gaya dorong (cembung) diperkecil
+    const spacing = 26; // Jarak antar titik
+    const radius = 2; // Ukuran titik tetap agar warna terlihat
+    const maxDistance = 100; // Radius efek cembung diperkecil
+    const pushStrength = 0.4; // Kekuatan dorongan diperhalus
+
+    const resize = () => {
+      canvas.width = canvas.parentElement.offsetWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+      initDots();
+    };
+
+    const initDots = () => {
+      dots = [];
+      const cols = Math.floor(canvas.width / spacing);
+      const rows = Math.floor(canvas.height / spacing);
+      
+      // Menyiapkan grid titik
+      for (let i = 0; i <= cols; i++) {
+        for (let j = 0; j <= rows; j++) {
+          dots.push({
+            baseX: i * spacing,
+            baseY: j * spacing,
+            x: i * spacing,
+            y: j * spacing,
+          });
+        }
+      }
+    };
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Opasitas warna hijau tetap 0.8 agar sangat terlihat
+      ctx.fillStyle = "rgba(18, 140, 62, 0.8)"; 
+
+      dots.forEach((dot) => {
+        // Kalkulasi jarak kursor ke posisi asli titik
+        const dx = mouse.current.x - dot.baseX;
+        const dy = mouse.current.y - dot.baseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        let targetX = dot.baseX;
+        let targetY = dot.baseY;
+
+        // Jika dalam radius, dorong titik menjauh dari kursor (Efek Cembung)
+        if (distance < maxDistance) {
+          const force = (maxDistance - distance) / maxDistance;
+          // Dorongan menjauh
+          targetX = dot.baseX - dx * force * pushStrength;
+          targetY = dot.baseY - dy * force * pushStrength;
+        }
+
+        // Animasi pantulan halus (spring physics) agar pergerakan natural
+        dot.x += (targetX - dot.x) * 0.15;
+        dot.y += (targetY - dot.y) * 0.15;
+
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    window.addEventListener("resize", resize);
+    resize();
+    render();
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  // Update posisi kursor untuk canvas
+  const handleMouseMove = (e) => {
+    if (!canvasRef.current) return;
+    
+    // Cegah efek cembung jika kursor berada di atas elemen interaktif (button/link/navbar)
+    if (e.target.closest('button, a, [role="button"]')) {
+      mouse.current = { x: -1000, y: -1000 };
+      return;
+    }
+
+    const rect = canvasRef.current.getBoundingClientRect();
+    mouse.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+  };
+
+  // Reset kursor agar titik kembali rata saat mouse keluar area
+  const handleMouseLeave = () => {
+    mouse.current = { x: -1000, y: -1000 };
+  };
+
   return (
     <div className="bg-secondary">
-      <div className="relative overflow-hidden">
+      <div 
+        className="relative overflow-hidden"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Canvas Background Efek Cembung dengan Gradasi Fade-out ke bawah */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full z-0 pointer-events-none"
+          style={{
+            WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 85%)",
+            maskImage: "linear-gradient(to bottom, black 65%, transparent 85%)"
+          }}
+        />
+
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-8 lg:px-16 pt-32 lg:pt-52 pb-48 max-w-6xl mx-auto gap-10">
           <div className="max-w-md w-full">
             <motion.span
@@ -292,13 +418,13 @@ export default function Hero() {
             >
               <button
                 onClick={scrollToSectionDua}
-                className="bg-primary text-white font-poppins font-semibold px-6 py-3 lg:px-7 lg:py-3.5 rounded-full hover:bg-green-700 hover:-translate-y-1 transition-all shadow duration-200 text-sm md:text-base cursor-pointer"
+                className="bg-primary text-white font-poppins font-semibold px-6 py-3 lg:px-7 lg:py-3.5 rounded-full hover:bg-green-700 hover:-translate-y-1 transition-all shadow duration-200 text-sm md:text-base cursor-pointer relative z-20"
               >
                 Tentang Malang
               </button>
               <Link
                 to="/wisata"
-                className="flex items-center gap-2 font-poppins font-medium text-colortext bg-white/60 backdrop-blur-sm px-4 py-3 lg:px-5 lg:py-3.5 rounded-full hover:text-primary hover:-translate-y-1 shadow transition-all duration-200 text-sm md:text-base"
+                className="flex items-center gap-2 font-poppins font-medium text-colortext bg-white/60 backdrop-blur-sm px-4 py-3 lg:px-5 lg:py-3.5 rounded-full hover:text-primary hover:-translate-y-1 shadow transition-all duration-200 text-sm md:text-base relative z-20"
               >
                 Lihat Wisata
                 <span className="bg-primary text-white rounded-full w-6 h-6 lg:w-7 lg:h-7 flex items-center justify-center text-xs lg:text-sm">
@@ -336,7 +462,7 @@ export default function Hero() {
                 ease: "easeInOut",
                 delay: 0.5,
               }}
-              className="absolute -bottom-5 -left-6 bg-secondary rounded-2xl px-4 py-2 shadow-lg"
+              className="absolute -bottom-5 -left-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
             >
               <p className="text-xl font-bold font-poppins text-primary">
                 3,6 Juta
@@ -354,7 +480,7 @@ export default function Hero() {
                 ease: "easeInOut",
                 delay: 1,
               }}
-              className="absolute top-4 -right-6 bg-secondary rounded-2xl px-4 py-2 shadow-lg"
+              className="absolute top-4 -right-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
             >
               <p className="text-xl font-bold font-poppins text-primary">50+</p>
               <p className="text-xs font-poppins text-gray-500">
@@ -370,7 +496,7 @@ export default function Hero() {
                 ease: "easeInOut",
                 delay: 0.2,
               }}
-              className="absolute -bottom-5 right-10 bg-secondary rounded-2xl px-4 py-2 shadow-lg"
+              className="absolute -bottom-5 right-10 bg-white rounded-2xl px-4 py-2 shadow-lg"
             >
               <p className="text-xl font-bold font-poppins text-primary">30+</p>
               <p className="text-xs font-poppins text-gray-500">Makanan Khas</p>
@@ -491,6 +617,8 @@ export default function Hero() {
           <AboutSlider />
         </FadeInWhenVisible>
       </div>
+
+      <Footer />
     </div>
   );
 }
