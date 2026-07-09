@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { wisataData } from '../components/wisataData'; // Sesuaikan path jika perlu
 import DetailWisataModal from '../components/DetailWisataModal'; // Sesuaikan path jika perlu
 import FooterWisata from '../components/footer'; // Import komponen Footer Baru
@@ -8,6 +8,12 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 
 const WisataPage = () => {
+  // Efek ini akan berjalan sekali saat halaman pertama kali di-render
+  // untuk memastikan tampilan selalu mulai dari paling atas
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [selectedWisata, setSelectedWisata] = useState(null);
   
   // Logic "Lihat Lebih Banyak" (Load More) dan "Lihat Lebih Sedikit"
@@ -326,9 +332,9 @@ const WisataPage = () => {
                 }}
               >
                 
-                {/* Image Placeholder */}
+                {/* Image Display */}
                 <div className="bg-[#128C3E] w-full h-48 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden group">
-                   <span className="text-[#F8F4E1] font-bold opacity-70 text-center px-4 z-10">{wisata.name} Image</span>
+                   <img src={wisata.image} alt={wisata.name} className="w-full h-full object-cover" />
                    <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 
@@ -461,9 +467,9 @@ const WisataPage = () => {
                     onClick={() => setSelectedWisata(wisata)}
                     className="glassmorphism hover:glassmorphism-dark p-4 rounded-2xl cursor-pointer transition-all duration-300 flex items-center gap-4 group hover:translate-x-1"
                   >
-                    {/* Thumbnail Bulat */}
-                    <div className="w-16 h-16 rounded-xl bg-[#128C3E] flex-shrink-0 flex items-center justify-center text-[8px] text-[#F8F4E1] font-bold text-center px-1 shadow-inner group-hover:scale-105 transition-transform">
-                      {wisata.name.substring(0, 15)}...
+                    {/* Thumbnail Bulat dengan Gambar Asli */}
+                    <div className="w-16 h-16 rounded-xl bg-[#128C3E] flex-shrink-0 flex items-center justify-center text-[8px] text-[#F8F4E1] font-bold text-center shadow-inner group-hover:scale-105 transition-transform overflow-hidden">
+                      <img src={wisata.image} alt={wisata.name} className="w-full h-full object-cover" />
                     </div>
                     
                     {/* Teks Informasi */}
