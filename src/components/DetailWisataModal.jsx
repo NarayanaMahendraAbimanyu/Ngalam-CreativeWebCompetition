@@ -28,19 +28,15 @@ const DetailWisataModal = ({ wisata, onClose }) => {
 
   const currentPrice = isWeekend ? wisata.priceWeekend : wisata.priceWeekday;
   const isFree = currentPrice === 0;
+  
+  // LOGIC BARU: Cek kalau tiket mati (karena tutup ATAU gratis)
+  const isBookingDisabled = isFree || !wisata.isBeroperasi;
 
-  const handlePesanWA = () => {
-    if (isFree) return; // Mencegah klik jika gratis
-    if (!tanggal) return alert("Pilih tanggal kunjungan terlebih dahulu!");
+  const handlePesanTiket = () => {
+    if (isBookingDisabled) return; // Mencegah klik jika gratis atau tidak beroperasi
     
-    const formattedDate = new Date(tanggal).toLocaleDateString('id-ID', {
-      day: 'numeric', month: 'long', year: 'numeric'
-    });
-    
-    const pesan = `Halo kak, apa benar ini pihak ${wisata.name}? Saya ingin memesan tiket untuk ${jumlah} orang untuk tanggal ${formattedDate}. Apakah benar nominalnya Rp. ${totalHarga.toLocaleString('id-ID')}?`;
-    
-    const waUrl = `https://wa.me/${wisata.waNumber}?text=${encodeURIComponent(pesan)}`;
-    window.open(waUrl, '_blank');
+    // Langsung arahkan ke link Tiket.com wisata tersebut (Tidak ke WA lagi)
+    window.open(wisata.linkTiket, '_blank');
   };
 
   if (!wisata) return null;
@@ -87,14 +83,35 @@ const DetailWisataModal = ({ wisata, onClose }) => {
 
         {/* Kiri: Gambar/Maps/Dokumentasi */}
         <div className={`w-full flex flex-col transition-all duration-700 mt-8 md:mt-0 ${isFullscreen ? 'md:w-1/2 gap-6' : 'md:w-1/2 gap-4'}`}>
+          {/* Gambar Wisata Utama */}
           <div className={`bg-[#F8F4E1] w-full rounded-2xl flex items-center justify-center overflow-hidden shadow-inner transition-all duration-700 ${isFullscreen ? 'h-[350px] lg:h-[500px]' : 'h-[250px] md:h-72'}`}>
-             <span className={`text-[#543310] font-semibold opacity-60 transition-all duration-700 ${isFullscreen ? 'text-xl' : 'text-base'}`}>{wisata.name} Image</span>
+             <img 
+               src={wisata.image} 
+               alt={`Foto ${wisata.name}`} 
+               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+             />
           </div>
+          
           <div>
             <h3 className={`text-[#F8F4E1] font-bold transition-all duration-700 ${isFullscreen ? 'mb-4 text-xl' : 'mb-3 text-base'}`}>Dokumentasi Pengunjung</h3>
             <div className="flex gap-4">
-              <div className={`bg-[#F8F4E1]/20 border border-[#F8F4E1]/30 flex-1 rounded-xl flex items-center justify-center text-[#F8F4E1] text-center p-2 backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'h-40 text-lg' : 'h-32 text-xs'}`}>Pic 1</div>
-              <div className={`bg-[#F8F4E1]/20 border border-[#F8F4E1]/30 flex-1 rounded-xl flex items-center justify-center text-[#F8F4E1] text-center p-2 backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'h-40 text-lg' : 'h-32 text-xs'}`}>Pic 2</div>
+              {/* Gambar Dokumentasi 1 */}
+              <div className={`bg-[#F8F4E1]/20 border border-[#F8F4E1]/30 flex-1 rounded-xl flex items-center justify-center overflow-hidden backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'h-40' : 'h-32'}`}>
+                <img 
+                  src={wisata.dokumentasi1} 
+                  alt="Dokumentasi Pengunjung 1" 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              
+              {/* Gambar Dokumentasi 2 */}
+              <div className={`bg-[#F8F4E1]/20 border border-[#F8F4E1]/30 flex-1 rounded-xl flex items-center justify-center overflow-hidden backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'h-40' : 'h-32'}`}>
+                <img 
+                  src={wisata.dokumentasi2} 
+                  alt="Dokumentasi Pengunjung 2" 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -105,13 +122,17 @@ const DetailWisataModal = ({ wisata, onClose }) => {
             {wisata.name}
           </h2>
           
-          {/* Tambahan: Tag Wilayah & Kategori Sinkron dengan Filter */}
+          {/* TAG WILAYAH, KATEGORI, DAN TAMBAHAN STATUS BEROPERASI */}
           <div className="flex flex-wrap gap-2 -mt-2">
             <span className={`bg-[#F8F4E1]/20 border border-[#F8F4E1]/30 text-[#F8F4E1] px-3 py-1 rounded-full backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'}`}>
               📍 Wilayah {wisata.kecamatan}
             </span>
             <span className={`bg-[#FFDD02]/20 border border-[#FFDD02]/30 text-[#FFDD02] font-semibold px-3 py-1 rounded-full backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'}`}>
               🏷️ {wisata.kategori}
+            </span>
+            {/* Tag Operasional dengan Warna Merah / Hijau */}
+            <span className={`font-semibold px-3 py-1 rounded-full backdrop-blur-sm transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'} ${wisata.isBeroperasi ? 'bg-green-500/20 border border-green-500/30 text-green-400' : 'bg-red-500/20 border border-red-500/30 text-red-400'}`}>
+              {wisata.isBeroperasi ? '🟢 Sedang Beroperasi' : '🔴 Tidak Beroperasi'}
             </span>
           </div>
 
@@ -153,29 +174,29 @@ const DetailWisataModal = ({ wisata, onClose }) => {
           </div>
 
           {/* Card Pesan Tiket */}
-          <div className={`rounded-2xl shadow-lg border border-[#F8F4E1]/10 mt-auto transition-all duration-700 ${isFullscreen ? 'p-6 md:p-8' : 'p-5'} ${isFree ? 'bg-[#543310]/40' : 'bg-[#543310]'}`}>
-            <h3 className={`font-bold transition-all duration-700 ${isFullscreen ? 'text-2xl mb-6' : 'text-xl mb-4'} ${isFree ? 'text-[#F8F4E1]/40' : 'text-[#F8F4E1]'}`}>Pesan Tiket</h3>
+          <div className={`rounded-2xl shadow-lg border border-[#F8F4E1]/10 mt-auto transition-all duration-700 ${isFullscreen ? 'p-6 md:p-8' : 'p-5'} ${!wisata.isBeroperasi || isFree ? 'bg-[#543310]/40' : 'bg-[#543310]'}`}>
+            <h3 className={`font-bold transition-all duration-700 ${isFullscreen ? 'text-2xl mb-6' : 'text-xl mb-4'} ${!wisata.isBeroperasi || isFree ? 'text-[#F8F4E1]/40' : 'text-[#F8F4E1]'}`}>Pesan Tiket</h3>
             
             <div className={`flex gap-4 transition-all duration-700 ${isFullscreen ? 'mb-6' : 'mb-5'}`}>
               
               {/* Input Jumlah Wisatawan */}
               <div className="flex-1">
-                <label className={`block mb-2 transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'} ${isFree ? 'text-[#F8F4E1]/30' : 'text-[#F8F4E1] opacity-90'}`}>Jumlah Wisatawan :</label>
-                <div className={`flex items-center justify-between rounded-lg px-3 font-bold transition-all duration-700 ${isFullscreen ? 'py-3' : 'py-2'} ${isFree ? 'bg-gray-500 text-gray-700 cursor-not-allowed select-none' : 'bg-[#F8F4E1] text-[#543310]'}`}>
+                <label className={`block mb-2 transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'} ${!wisata.isBeroperasi || isFree ? 'text-[#F8F4E1]/30' : 'text-[#F8F4E1] opacity-90'}`}>Jumlah Wisatawan :</label>
+                <div className={`flex items-center justify-between rounded-lg px-3 font-bold transition-all duration-700 ${isFullscreen ? 'py-3' : 'py-2'} ${isBookingDisabled ? 'bg-gray-500 text-gray-700 cursor-not-allowed select-none' : 'bg-[#F8F4E1] text-[#543310]'}`}>
                   <button 
                     type="button" 
-                    disabled={isFree} 
+                    disabled={isBookingDisabled} 
                     onClick={() => setJumlah(Math.max(1, jumlah - 1))} 
-                    className={`text-2xl px-2 hover:scale-110 transition-transform leading-none ${isFree ? 'text-gray-600 cursor-not-allowed pointer-events-none' : 'text-[#128C3E]'}`}
+                    className={`text-2xl px-2 hover:scale-110 transition-transform leading-none ${isBookingDisabled ? 'text-gray-600 cursor-not-allowed pointer-events-none' : 'text-[#128C3E]'}`}
                   >
                     -
                   </button>
-                  <span className={`transition-all duration-700 ${isFullscreen ? 'text-xl' : 'text-lg'} ${isFree ? 'opacity-40' : ''}`}>{jumlah}</span>
+                  <span className={`transition-all duration-700 ${isFullscreen ? 'text-xl' : 'text-lg'} ${isBookingDisabled ? 'opacity-40' : ''}`}>{jumlah}</span>
                   <button 
                     type="button" 
-                    disabled={isFree} 
+                    disabled={isBookingDisabled} 
                     onClick={() => setJumlah(jumlah + 1)} 
-                    className={`text-2xl px-2 hover:scale-110 transition-transform leading-none ${isFree ? 'text-gray-600 cursor-not-allowed pointer-events-none' : 'text-[#128C3E]'}`}
+                    className={`text-2xl px-2 hover:scale-110 transition-transform leading-none ${isBookingDisabled ? 'text-gray-600 cursor-not-allowed pointer-events-none' : 'text-[#128C3E]'}`}
                   >
                     +
                   </button>
@@ -184,18 +205,18 @@ const DetailWisataModal = ({ wisata, onClose }) => {
               
               {/* Input Tanggal Kunjungan */}
               <div className="flex-1">
-                <label className={`block mb-2 transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'} ${isFree ? 'text-[#F8F4E1]/30' : 'text-[#F8F4E1] opacity-90'}`}>Tanggal Kunjungan :</label>
+                <label className={`block mb-2 transition-all duration-700 ${isFullscreen ? 'text-sm' : 'text-xs'} ${!wisata.isBeroperasi || isFree ? 'text-[#F8F4E1]/30' : 'text-[#F8F4E1] opacity-90'}`}>Tanggal Kunjungan :</label>
                 <input 
                   type="date" 
                   value={tanggal}
-                  disabled={isFree}
+                  disabled={isBookingDisabled}
                   onChange={(e) => setTanggal(e.target.value)}
-                  className={`w-full font-bold rounded-lg px-3 outline-none text-center transition-all duration-700 ${isFullscreen ? 'h-[52px] text-base' : 'h-[44px] py-2'} ${isFree ? 'bg-gray-500 text-gray-700 cursor-not-allowed opacity-60' : 'bg-[#F8F4E1] text-[#543310]'}`}
+                  className={`w-full font-bold rounded-lg px-3 outline-none text-center transition-all duration-700 ${isFullscreen ? 'h-[52px] text-base' : 'h-[44px] py-2'} ${isBookingDisabled ? 'bg-gray-500 text-gray-700 cursor-not-allowed opacity-60' : 'bg-[#F8F4E1] text-[#543310]'}`}
                 />
               </div>
             </div>
 
-            <div className={`border-t border-[#F8F4E1]/20 flex flex-col text-[#F8F4E1] transition-all duration-700 ${isFullscreen ? 'pt-5 pb-5 gap-4 text-base' : 'pt-4 pb-4 gap-3 text-sm'} ${isFree ? 'opacity-30' : ''}`}>
+            <div className={`border-t border-[#F8F4E1]/20 flex flex-col text-[#F8F4E1] transition-all duration-700 ${isFullscreen ? 'pt-5 pb-5 gap-4 text-base' : 'pt-4 pb-4 gap-3 text-sm'} ${!wisata.isBeroperasi || isFree ? 'opacity-30' : ''}`}>
               <div className="flex justify-between items-center">
                 <span className="opacity-90">Tiket Masuk ({isWeekend ? 'Weekend' : 'Weekday'}):</span>
                 <span className="font-semibold">{ isFree ? "Gratis" : `Rp. ${currentPrice.toLocaleString('id-ID')} / Orang` }</span>
@@ -206,17 +227,19 @@ const DetailWisataModal = ({ wisata, onClose }) => {
               </div>
             </div>
 
-            {/* Tombol Pemesanan */}
+            {/* Tombol Pemesanan (Disesuaikan berdasarkan Tutup vs Gratis vs Buka) */}
             <button 
-              onClick={handlePesanWA}
-              disabled={isFree}
+              onClick={handlePesanTiket}
+              disabled={isBookingDisabled}
               className={`w-full font-bold rounded-xl transition-all mt-2 tracking-wide shadow-md duration-700 ${isFullscreen ? 'py-4 md:py-5 text-base md:text-lg' : 'py-3 md:py-4 text-sm md:text-base'} ${
-                isFree 
+                !wisata.isBeroperasi
+                ? 'bg-red-900/60 text-red-300 cursor-not-allowed border-none shadow-none opacity-80'
+                : isFree 
                 ? 'bg-gray-600 text-gray-400 cursor-not-allowed border-none shadow-none opacity-50' 
                 : 'bg-[#128C3E] hover:bg-[#0e6e30] text-[#F8F4E1]'
               }`}
             >
-              {isFree ? "TIKET GRATIS (TIDAK PERLU PESAN)" : "PESAN TIKET SEKARANG"}
+              {!wisata.isBeroperasi ? "TIKET DITUTUP (TIDAK BEROPERASI)" : isFree ? "TIKET GRATIS (TIDAK PERLU PESAN)" : "PESAN TIKET SEKARANG DI TIKET.COM"}
             </button>
           </div>
         </div>
