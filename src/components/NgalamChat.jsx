@@ -58,17 +58,36 @@ export default function NgalamChat() {
     setChatInput("");
 
     try {
-      const systemPrompt = "Anda adalah Ngalam Chat, Asisten AI Cerdas dan Pemandu Wisata resmi Kota Malang. Pengetahuan Anda mencakup lokasi geografi, pariwisata, sejarah, budaya, kuliner, dan prestasi Kota Malang. ATURAN WAJIB FORMAT & GAYA BAHASA: 1. Jawab SELALU dengan Bahasa Indonesia baku yang sangat sopan, ramah, dan profesional. 2. DILARANG menggunakan bahasa gaul/kasar. 3. FORMAT TEKS: Berikan jawaban yang ringkas dan mudah dibaca. Gunakan paragraf pendek. SELALU berikan jarak/enter ganda antar poin atau paragraf. JANGAN menggunakan simbol markdown berlebihan seperti asterisk ganda untuk bold, gunakan penomoran biasa (1, 2, 3) yang rapi. 4. Jangan menolak pertanyaan dasar.";
+    // 1. Ultra-safe check for environment variables across Vite and CRA
+    const apiKey = (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_OPENAI_API_KEY)) || (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_KEY);
+
+    // 2. Failsafe for GitHub Collaborators
+    if (!apiKey) {
+      setChatMessages(prev => {
+        const updated = [...prev];
+        if (updated.length > 0 && updated[updated.length - 1].isLoading) {
+          updated[updated.length - 1] = {
+            text: "⚠️ Peringatan Developer: API Key tidak ditemukan. Karena file .env otomatis diabaikan oleh GitHub (gitignore), Anda harus meminta isi file .env kepada developer utama dan meletakkannya di folder root komputer Anda agar chatbot ini berfungsi.",
+            isBot: true,
+            isLoading: false
+          };
+        }
+        return updated;
+      });
+      return; // Stop execution to prevent fetch crash
+    }
+
+    const systemPrompt = "Anda adalah Ngalam Chat, Asisten AI Cerdas dan Pemandu Wisata resmi Kota Malang. Pengetahuan Anda mencakup lokasi geografi, pariwisata, sejarah, budaya, kuliner, dan prestasi Kota Malang. ATURAN WAJIB FORMAT & GAYA BAHASA: 1. Jawab SELALU dengan Bahasa Indonesia baku yang sangat sopan, ramah, dan profesional. 2. DILARANG menggunakan bahasa gaul/kasar. 3. FORMAT TEKS: Berikan jawaban yang ringkas dan mudah dibaca. Gunakan paragraf pendek. SELALU berikan jarak/enter ganda antar poin atau paragraf. JANGAN menggunakan simbol markdown berlebihan seperti asterisk ganda untuk bold, gunakan penomoran biasa (1, 2, 3) yang rapi. 4. Jangan menolak pertanyaan dasar.";
 
       let aiResponse = "";
 
       // 🚨 AGENT: IMPLEMENT THE CORRECT FETCH BLOCK BASED ON .env 🚨
 
       // --- OPTION B: IF USING GOOGLE GEMINI ---
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.REACT_APP_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("VITE_GEMINI_API_KEY is not defined in the environment.");
-      }
+      // const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.REACT_APP_GEMINI_API_KEY;
+      // if (!apiKey) {
+      //   throw new Error("VITE_GEMINI_API_KEY is not defined in the environment.");
+      // }
 
       // Try multiple models in order of preference to guarantee a response (bulletproof)
       const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash", GEMINI_MODEL, "gemini-2.0-flash-lite"];
@@ -120,17 +139,31 @@ export default function NgalamChat() {
         return updated;
       });
 
-    } catch (error) {
-      console.error("Chatbot API Error Details:", error);
-      setChatMessages(prev => {
-        const updated = [...prev];
-        if (updated.length > 0 && updated[updated.length - 1].isLoading) {
-          updated[updated.length - 1] = { text: "Mohon maaf, koneksi jaringan saya ke server pusat sedang mengalami gangguan singkat. Sila kirim ulang pertanyaan Anda ya, Sam. 🙏", isBot: true, isLoading: false };
+      } catch (error) {
+    console.error("Chatbot Error:", error);
+    setChatMessages(prev => {
+      const updated = [...prev];
+      if (updated.length > 0 && updated[updated.length - 1].isLoading) {
+
+        // Custom Developer Error for missing GitHub .env
+        if (error.message === "MISSING_ENV_KEY") {
+          updated[updated.length - 1] = {
+            text: "⚠️ SISTEM DEV: API Key tidak ditemukan. Jika Anda baru melakukan PULL dari GitHub, minta file `.env` ke developer utama dan letakkan di folder root project Anda.",
+            isBot: true,
+            isLoading: false
+          };
+        } else {
+          // Standard Network Error
+          updated[updated.length - 1] = {
+            text: "Mohon maaf, koneksi jaringan saya ke server pusat sedang mengalami gangguan singkat. Sila kirim ulang pertanyaan Anda ya, Sam. 🙏",
+            isBot: true,
+            isLoading: false
+          };
         }
-        return updated;
-      });
-    }
-  };
+      }
+      return updated;
+    });
+  }};
 
   return (
     <div className="fixed bottom-8 right-8 z-[100]">

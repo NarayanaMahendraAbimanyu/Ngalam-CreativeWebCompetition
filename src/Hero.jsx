@@ -362,9 +362,10 @@ export default function Hero() {
               className="inline-block text-sm font-poppins text-colortext px-4 py-3 rounded-full mb-2 shadow"
             />
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-[#4A2E1B] mb-6 leading-tight tracking-tight">
-              Explore the<br/>
-              City of <span className="text-[#14532d] whitespace-nowrap">Malang<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Logo_Kota_Malang_color.png" alt="Logo Kota Malang" className="inline-block w-auto h-[0.85em] ml-3 -translate-y-1 align-baseline object-contain" /></span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+              <span className="text-[#4A2E1B] block">Explore the</span>
+              <span className="text-[#4A2E1B] block">City of</span>
+              <span className="text-[#14532d] block">Malang</span>
             </h1>
 
             <motion.p
@@ -389,18 +390,12 @@ export default function Hero() {
               >
                 Tentang Malang
               </button>
-              <button
-                type="button"
-                onClick={() => navigate("/wisata")}
-                className="flex items-center gap-3 text-gray-700 font-bold hover:text-[#14532d] transition-colors"
-              >
-                <span className="bg-white rounded-full p-3 shadow-md">
-                  <svg className="w-5 h-5 text-[#14532d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                  </svg>
-                </span>
+              <a href="/wisata" className="bg-white text-[#14532d] font-bold py-3 md:py-4 px-6 md:px-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-50 transition-all flex items-center gap-3 border border-gray-100">
                 Lihat Wisata
-              </button>
+                <span className="bg-[#14532d] text-white rounded-full p-1.5 flex items-center justify-center">
+                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+              </a>
             </motion.div>
           </div>
 
