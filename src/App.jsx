@@ -1,18 +1,17 @@
-import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
+import NgalamChat from "./components/NgalamChat";
 import Hero from "./Hero";
 import Makanan from "./pages/makanan";
 import Budaya from "./pages/budaya";
 import Wisata from "./pages/wisata";
 
 export default function App() {
-  const location = useLocation();
-
   return (
     <>
     
       <Navbar />
+      <NgalamChat />
       <Routes>
         <Route path="/" element={<Hero />} />
         <Route path="/makanan" element={<Makanan />} />

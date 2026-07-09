@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 import AboutSlider from "./components/aboutSlider";
 import Footer from "./components/footer";
@@ -230,12 +230,12 @@ function FadeInWhenVisible({ children, delay = 0, direction = "up" }) {
 }
 
 export default function Hero() {
+  const navigate = useNavigate();
   const sectionDuaRef = useRef(null);
   const canvasRef = useRef(null);
-  // Menyimpan posisi kursor tanpa re-render state untuk performa yang lebih baik
+
   const mouse = useRef({ x: -1000, y: -1000 });
 
-  // Efek untuk memastikan scroll berada di paling atas (posisi 0) saat load/reload/pindah page
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -251,11 +251,10 @@ export default function Hero() {
     let animationFrameId;
     let dots = [];
 
-    // Pengaturan pola dan gaya dorong (cembung) diperkecil
-    const spacing = 26; // Jarak antar titik
-    const radius = 2; // Ukuran titik tetap agar warna terlihat
-    const maxDistance = 100; // Radius efek cembung diperkecil
-    const pushStrength = 0.4; // Kekuatan dorongan diperhalus
+    const spacing = 26;
+    const radius = 2;
+    const maxDistance = 100;
+    const pushStrength = 0.4;
 
     const resize = () => {
       canvas.width = canvas.parentElement.offsetWidth;
@@ -267,8 +266,7 @@ export default function Hero() {
       dots = [];
       const cols = Math.floor(canvas.width / spacing);
       const rows = Math.floor(canvas.height / spacing);
-      
-      // Menyiapkan grid titik
+
       for (let i = 0; i <= cols; i++) {
         for (let j = 0; j <= rows; j++) {
           dots.push({
@@ -283,11 +281,9 @@ export default function Hero() {
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // Opasitas warna hijau tetap 0.8 agar sangat terlihat
-      ctx.fillStyle = "rgba(18, 140, 62, 0.8)"; 
+      ctx.fillStyle = "rgba(18, 140, 62, 0.8)";
 
       dots.forEach((dot) => {
-        // Kalkulasi jarak kursor ke posisi asli titik
         const dx = mouse.current.x - dot.baseX;
         const dy = mouse.current.y - dot.baseY;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -295,15 +291,12 @@ export default function Hero() {
         let targetX = dot.baseX;
         let targetY = dot.baseY;
 
-        // Jika dalam radius, dorong titik menjauh dari kursor (Efek Cembung)
         if (distance < maxDistance) {
           const force = (maxDistance - distance) / maxDistance;
-          // Dorongan menjauh
           targetX = dot.baseX - dx * force * pushStrength;
           targetY = dot.baseY - dy * force * pushStrength;
         }
 
-        // Animasi pantulan halus (spring physics) agar pergerakan natural
         dot.x += (targetX - dot.x) * 0.15;
         dot.y += (targetY - dot.y) * 0.15;
 
@@ -325,11 +318,9 @@ export default function Hero() {
     };
   }, []);
 
-  // Update posisi kursor untuk canvas
   const handleMouseMove = (e) => {
     if (!canvasRef.current) return;
-    
-    // Cegah efek cembung jika kursor berada di atas elemen interaktif (button/link/navbar)
+
     if (e.target.closest('button, a, [role="button"]')) {
       mouse.current = { x: -1000, y: -1000 };
       return;
@@ -342,25 +333,23 @@ export default function Hero() {
     };
   };
 
-  // Reset kursor agar titik kembali rata saat mouse keluar area
   const handleMouseLeave = () => {
     mouse.current = { x: -1000, y: -1000 };
   };
 
   return (
     <div className="bg-secondary">
-      <div 
+      <div
         className="relative overflow-hidden"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Canvas Background Efek Cembung dengan Gradasi Fade-out ke bawah */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full z-0 pointer-events-none"
           style={{
             WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 85%)",
-            maskImage: "linear-gradient(to bottom, black 65%, transparent 85%)"
+            maskImage: "linear-gradient(to bottom, black 65%, transparent 85%)",
           }}
         />
 
@@ -371,34 +360,12 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               className="inline-block text-sm font-poppins text-colortext px-4 py-3 rounded-full mb-2 shadow"
-            >
-            </motion.span>
+            />
 
-            <motion.h1
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold font-poppins text-colortext leading-tight"
-            >
-              Explore the <br /> City of{" "}
-              <span className="text-primary relative inline-block">
-                Malang
-                <svg
-                  viewBox="0 0 200 12"
-                  className="absolute -bottom-2 left-0 w-full"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0 6 Q50 0 100 6 Q150 12 200 6"
-                    stroke="#128C3E"
-                    strokeWidth="2.5"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  <polygon points="204,6 198,3 198,9" fill="#128C3E" />
-                </svg>
-              </span>
-            </motion.h1>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-[#4A2E1B] mb-6 leading-tight tracking-tight">
+              Explore the<br/>
+              City of <span className="text-[#14532d] whitespace-nowrap">Malang<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Logo_Kota_Malang_color.png" alt="Logo Kota Malang" className="inline-block w-auto h-[0.85em] ml-3 -translate-y-1 align-baseline object-contain" /></span>
+            </h1>
 
             <motion.p
               initial={{ opacity: 0, x: -40 }}
@@ -422,15 +389,18 @@ export default function Hero() {
               >
                 Tentang Malang
               </button>
-              <Link
-                to="/wisata"
-                className="flex items-center gap-2 font-poppins font-medium text-colortext bg-white/60 backdrop-blur-sm px-4 py-3 lg:px-5 lg:py-3.5 rounded-full hover:text-primary hover:-translate-y-1 shadow transition-all duration-200 text-sm md:text-base relative z-20"
+              <button
+                type="button"
+                onClick={() => navigate("/wisata")}
+                className="flex items-center gap-3 text-gray-700 font-bold hover:text-[#14532d] transition-colors"
               >
-                Lihat Wisata
-                <span className="bg-primary text-white rounded-full w-6 h-6 lg:w-7 lg:h-7 flex items-center justify-center text-xs lg:text-sm">
-                  ↗
+                <span className="bg-white rounded-full p-3 shadow-md">
+                  <svg className="w-5 h-5 text-[#14532d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                  </svg>
                 </span>
-              </Link>
+                Lihat Wisata
+              </button>
             </motion.div>
           </div>
 
@@ -618,7 +588,177 @@ export default function Hero() {
         </FadeInWhenVisible>
       </div>
 
+      <div className="w-full bg-[#F8F4E1] py-24 px-8 md:px-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12 border-b border-emerald-900/10 pb-8">
+            <div className="w-full md:w-1/2">
+              <span className="text-[#14532d] font-bold tracking-widest uppercase mb-2 inline-block text-sm">
+                Berita & Agenda
+              </span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-[#14532d] leading-tight">
+                Prestasi Terkini
+              </h2>
+            </div>
+            <div className="w-full md:w-1/2 md:pt-8">
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Kota Malang terus berkomitmen mengukir sejarah melalui berbagai
+                inovasi dan penghargaan di tingkat nasional, menjadikannya kota
+                cerdas yang terus maju.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+            <div className="lg:col-span-7 relative rounded-2xl overflow-hidden group shadow-lg h-[400px] lg:h-[450px]">
+              <img
+                src="https://malangkota.go.id/wp-content/uploads/2025/12/1232-370x280.jpeg"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                alt="PPA Award"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#14532d]/90 via-black/40 to-transparent"></div>
+              <div className="absolute bottom-8 left-8 right-8">
+                <p className="text-emerald-200 text-sm font-bold mb-2">Jul, 8 2026</p>
+                <h3 className="text-3xl font-bold text-white mb-4 leading-snug">
+                  Penghargaan PPA Award Nasional
+                </h3>
+                <p className="text-emerald-50/90 text-sm mb-4 line-clamp-2">
+                  Pemerintah Kota Malang berhasil meraih dua penghargaan bergengsi dari Kementerian Dalam Negeri RI atas kinerja luar biasa dalam tata kelola pemerintahan.
+                </p>
+                <a
+                  href="https://malangkota.go.id/2025/12/01/raih-dua-penghargaan-kemendagri-ri-apresiasi-kinerja-pemkot-malang/"
+                  className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-sm border border-white/30 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-white/40 transition-colors"
+                >
+                  Lihat ➔
+                </a>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 flex flex-col gap-8 h-[450px]">
+              <div className="flex-1 flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-lg group">
+                <div className="w-full sm:w-2/5 h-40 sm:h-full overflow-hidden">
+                  <img
+                    src="https://malangkota.go.id/wp-content/uploads/2025/11/IMG_20251108_081545-370x280.jpg"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt="Perpamsi"
+                  />
+                </div>
+                <div className="w-full sm:w-3/5 p-6 flex flex-col justify-center">
+                  <p className="text-gray-400 text-xs font-bold mb-2">Jul, 7 2026</p>
+                  <h3 className="text-lg font-bold text-[#14532d] mb-4 leading-snug">
+                    Penghargaan Perpamsi Terbaik
+                  </h3>
+                  <p className="text-gray-500 text-xs mb-3 line-clamp-2">
+                    Kota Malang kembali menorehkan prestasi dengan meraih penghargaan Inovasi Membangun Negeri 2025 berkat program kreatif berkelanjutan.
+                  </p>
+                  <a
+                    href="https://malangkota.go.id/2025/11/08/kota-malang-raih-penghargaan-inovasi-membangun-negeri-2025/"
+                    className="text-[#14532d] font-bold hover:text-emerald-600 flex items-center gap-1 text-sm w-fit"
+                  >
+                    Lihat ➔
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-lg group">
+                <div className="w-full sm:w-2/5 h-40 sm:h-full overflow-hidden">
+                  <img
+                    src="https://malangkota.go.id/wp-content/uploads/2025/11/detikJatim-Award-2025.-370x280.jpg"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt="Inovasi"
+                  />
+                </div>
+                <div className="w-full sm:w-3/5 p-6 flex flex-col justify-center">
+                  <p className="text-gray-400 text-xs font-bold mb-2">Jul, 7 2026</p>
+                  <h3 className="text-lg font-bold text-[#14532d] mb-4 leading-snug">
+                    Inovasi Layanan Publik Unggulan
+                  </h3>
+                  <p className="text-gray-500 text-xs mb-3 line-clamp-2">
+                    Melalui program 1.000 Event, Pemkot Malang sukses menyabet Anugerah Program Ekonomi Terpuji yang berdampak signifikan pada kemajuan lokal.
+                  </p>
+                  <a
+                    href="https://malangkota.go.id/2025/11/05/galakkan-1-000-event-pemkot-malang-raih-anugerah-program-ekonomi-terpuji/"
+                    className="text-[#14532d] font-bold hover:text-emerald-600 flex items-center gap-1 text-sm w-fit"
+                  >
+                    Lihat ➔
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="https://malangkota.go.id/category/berita/prestasi-dan-inovasi/"
+            className="flex justify-between items-center w-full bg-[#e2f1e8] text-[#14532d] px-8 py-5 rounded-xl hover:bg-[#d1e8d9] transition-colors shadow-sm font-bold text-lg"
+          >
+            <span>Prestasi Lainnya</span>
+            <span className="text-xl">❯</span>
+          </a>
+        </div>
+      </div>
+
+      <div className="w-full bg-[#F8F4E1] pb-24 px-8 md:px-24">
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center mb-16">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 tracking-tight mb-4">
+            Temukan destinasimu <span className="text-[#14532d]">di Malang</span>
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl font-medium">
+            Jelajahi berbagai pilihan wisata memukau yang telah kami kurasi khusus untuk pengalaman liburan tak terlupakan Anda di Malang Raya.
+          </p>
+        </div>
+        <div className="max-w-7xl mx-auto mb-6">
+          <h3 className="text-2xl font-bold text-gray-900">Pilih Destinasi Anda</h3>
+        </div>
+        <div className="max-w-7xl mx-auto flex overflow-x-auto gap-5 pb-8 hide-scrollbar snap-x cursor-grab">
+          <a href="/wisata" className="min-w-[280px] md:min-w-[320px] h-[220px] relative rounded-3xl overflow-hidden snap-center flex-shrink-0 group shadow-lg">
+            <img src="https://cdn1-production-images-kly.akamaized.net/DomYxhCBoq9cI7i9C4zyaa0w8Os=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4121342/original/002781100_1660277512-Gunung_Bromo.jpg" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Alam" />
+            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors"></div>
+            <div className="absolute bottom-6 left-6"><span className="text-white font-bold text-3xl tracking-wide">Alam</span></div>
+          </a>
+          <a href="/budaya" className="min-w-[280px] md:min-w-[320px] h-[220px] relative rounded-3xl overflow-hidden snap-center flex-shrink-0 group shadow-lg">
+            <img src="https://malang.disway.id/upload/188f5262a0a59feafb2dc6aa648210b9.jpeg" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Budaya" />
+            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors"></div>
+            <div className="absolute bottom-6 left-6"><span className="text-white font-bold text-3xl tracking-wide">Budaya</span></div>
+          </a>
+          <a href="/budaya" className="min-w-[280px] md:min-w-[320px] h-[220px] relative rounded-3xl overflow-hidden snap-center flex-shrink-0 group shadow-lg">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjHLRnYRjBJnxPnY-bQklmn-RhnplxwRZ_0a5kEXGy_hsKRL9Dz1OE5I0&s=10" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Sejarah" />
+            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors"></div>
+            <div className="absolute bottom-6 left-6"><span className="text-white font-bold text-3xl tracking-wide">Sejarah</span></div>
+          </a>
+          <a href="/kuliner" className="min-w-[280px] md:min-w-[320px] h-[220px] relative rounded-3xl overflow-hidden snap-center flex-shrink-0 group shadow-lg">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6TshJVpTPBgelYvx99vFyDk8YZWttk2aVTb_-5o-cQv9NgPphu0gQ4-9m&s=10" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Kuliner" />
+            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors"></div>
+            <div className="absolute bottom-6 left-6"><span className="text-white font-bold text-3xl tracking-wide">Kuliner</span></div>
+          </a>
+          <a href="/wisata" className="min-w-[220px] h-[220px] bg-white border border-gray-200 rounded-3xl snap-center flex-shrink-0 flex flex-col items-center justify-center hover:border-[#14532d] hover:shadow-xl transition-all group">
+            <span className="text-5xl text-gray-300 group-hover:text-[#14532d] mb-2 leading-none tracking-widest">...</span>
+            <span className="text-xl font-bold text-gray-800 group-hover:text-[#14532d]">Lainnya</span>
+          </a>
+        </div>
+      </div>
+
+      <div className="w-full bg-[#F8F4E1] px-8 md:px-24 pb-24">
+        <div className="max-w-7xl mx-auto bg-[#14532d] rounded-[2rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
+          <div className="p-12 md:p-16 flex-1 flex flex-col justify-center">
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-10 leading-tight">Temukan hal baru<br/>anda di Malang</h2>
+            <div className="flex flex-col gap-5 text-emerald-50 text-lg font-medium mb-12">
+              <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Eksplorasi Digital Tanpa Batas</div>
+              <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Peta Wisata Interaktif Real-time</div>
+              <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Tour Guide AI Personal (Ngalam Chat)</div>
+              <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Rincian Biaya & Akses Termudah</div>
+            </div>
+            <div className="flex flex-wrap gap-4">
+              <a href="/wisata" className="bg-[#F8F4E1] text-[#14532d] font-bold py-3 px-8 rounded-full hover:bg-white transition-colors shadow-md text-center">Cari destinasimu</a>
+              <a href="/budaya" className="bg-transparent border-2 border-[#F8F4E1] text-[#F8F4E1] font-bold py-3 px-8 rounded-full hover:bg-white/10 transition-colors text-center">Cari di malang</a>
+            </div>
+          </div>
+          <div className="w-full lg:w-[45%] h-[400px] lg:h-auto">
+            <img src="https://tugujatim.id/wp-content/uploads/2021/09/333ddf83-dbe8-44fb-b02c-1f02d1f8ac73.jpg" alt="Eksplorasi Malang" className="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+
       <Footer />
+
     </div>
   );
 }

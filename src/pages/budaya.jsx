@@ -220,12 +220,12 @@ const malangCultures = [
 ];
 
 const budayaLetterImages = [
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Singhasari_temple.jpg/800px-Singhasari_temple.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Batik_Kraton.jpg/800px-Batik_Kraton.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Tari_Topeng_Malangan.jpg/800px-Tari_Topeng_Malangan.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Wayang_Klitik.jpg/800px-Wayang_Klitik.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Candi_Jago_2.jpg/800px-Candi_Jago_2.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Bantengan.jpg/800px-Bantengan.jpg",
+  "https://static.republika.co.id/uploads/images/xlarge/028717000-1647511644-1280-856.jpg",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXXzHp-Ez-9i09-u1O3FUhByLM_7JjytyXWdi6MiU78dh8Fbst4hS6dyM&s=10",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTcKJztI8a0T81GXnnvVnlWMmJlQFx_T4HtpWvfvmHZ6evNlUHreOLEdE&s=10",
+  "https://asset.kompas.com/crops/z78mzlTpqX_uMmItByGMogOXaHI=/140x0:983x562/750x500/data/photo/2022/11/23/637deff4a7743.jpg",
+  "https://www.tournesia.com/blog/wp-content/uploads/2026/02/Pesona-Kota-Malang-Wisata-Sejarah-Kuliner-dan-Budaya.jpg",
+  "https://cdn-1.timesmedia.co.id/images/2024/04/27/Pawai-Budaya-Kota-Malang-2.jpg",
 ];
 
 export default function Budaya() {
@@ -261,6 +261,46 @@ export default function Budaya() {
                 <p className="text-2xl font-black text-white">{currentHero.title}</p>
                 <p className="text-sm text-gray-200">{currentHero.text}</p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full bg-[#F8F4E1] py-24 px-8 md:px-24 flex flex-col items-center">
+        <div className="max-w-5xl mx-auto text-center mb-20">
+          <h2 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight leading-tight mb-8">Lebih dari sekadar kota. <br/><span className="text-emerald-700">Ini adalah Ngalam.</span></h2>
+          <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed">Titik temu sempurna antara warisan peradaban masa lalu, sejuknya udara pegunungan, dan inovasi pendidikan masa depan. Temukan alasan mengapa jutaan orang jatuh cinta pada kota ini.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mb-24">
+          <div className="bg-white rounded-[2rem] p-10 shadow-sm border border-emerald-900/5 hover:shadow-xl transition-all duration-300 flex flex-col justify-center items-center text-center">
+            <span className="text-6xl mb-6">🏛️</span>
+            <h3 className="text-3xl font-bold text-gray-900 mb-3">Abad ke-8</h3>
+            <p className="text-gray-500 font-medium">Jejak sejarah panjang dari era Kerajaan Kanjuruhan hingga kolonial.</p>
+          </div>
+          <div className="bg-[#14532d] text-white rounded-[2rem] p-10 shadow-2xl flex flex-col justify-center items-center text-center transform md:-translate-y-6 hover:scale-105 transition-all duration-500">
+            <span className="text-6xl mb-6">⛰️</span>
+            <h3 className="text-5xl font-black text-emerald-400 mb-3">440<span className="text-2xl font-medium text-white"> mdpl</span></h3>
+            <p className="text-emerald-50 text-lg">Ketinggian rata-rata yang menyajikan udara sejuk pegunungan sepanjang tahun.</p>
+          </div>
+          <div className="bg-white rounded-[2rem] p-10 shadow-sm border border-emerald-900/5 hover:shadow-xl transition-all duration-300 flex flex-col justify-center items-center text-center">
+            <span className="text-6xl mb-6">🎓</span>
+            <h3 className="text-3xl font-bold text-gray-900 mb-3">80+ Kampus</h3>
+            <p className="text-gray-500 font-medium">Pusat pendidikan, vokasi, dan inovasi generasi muda di Jawa Timur.</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl">
+          <div className="relative h-[500px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Singhasari_temple.jpg/800px-Singhasari_temple.jpg" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Sejarah" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10">
+              <h4 className="text-3xl font-bold text-white mb-2">Pusat Peradaban</h4>
+              <p className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">Menyimpan kekayaan candi dan peninggalan prasejarah yang megah.</p>
+            </div>
+          </div>
+          <div className="relative h-[500px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg">
+            <img src="https://images.unsplash.com/photo-1582650811985-e117498c474e?auto=format&fit=crop&w=800&q=80" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Urban" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10">
+              <h4 className="text-3xl font-bold text-white mb-2">Harmoni Urban</h4>
+              <p className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">Perpaduan tata kota yang dinamis dengan pelestarian budaya lokal.</p>
             </div>
           </div>
         </div>
@@ -349,6 +389,7 @@ export default function Budaya() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
