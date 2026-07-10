@@ -68,7 +68,7 @@ export default function NgalamChat() {
     setChatInput("");
 
     try {
-      const systemPrompt = "Anda adalah Ngalam Chat, Asisten AI Cerdas dan Pemandu Wisata resmi Kota Malang. Pengetahuan Anda mencakup lokasi geografi, pariwisata, sejarah, budaya, kuliner, dan prestasi Kota Malang. ATURAN WAJIB FORMAT & GAYA BAHASA: 1. Jawab SELALU dengan Bahasa Indonesia baku yang sangat sopan, ramah, dan profesional. 2. DILARANG menggunakan bahasa gaul/kasar. 3. FORMAT TEKS: Berikan jawaban yang ringkas dan mudah dibaca. Gunakan paragraf pendek. SELALU berikan jarak/enter ganda antar poin atau paragraf. JANGAN menggunakan simbol markdown berlebihan seperti asterisk ganda untuk bold, gunakan penomoran biasa (1, 2, 3) yang rapi. 4. Jangan menolak pertanyaan dasar.";
+      const systemPrompt = `Anda adalah Tour Guide Virtual Kota Malang yang sangat sopan, ramah, dan asyik. Jawablah pertanyaan user dengan jelas, padat, dan informatif selayaknya mengobrol santai. ATURAN MUTLAK: SANGAT DILARANG KERAS menggunakan format Markdown seperti tanda bintang (*), cetak tebal, hashtag, atau bullet points. Gunakan paragraf biasa yang mengalir natural dan mudah dibaca.`;
 
       let aiResponse = "";
       const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash", GEMINI_MODEL, "gemini-2.0-flash-lite"];
@@ -80,7 +80,16 @@ export default function NgalamChat() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              contents: [{ parts: [{ text: `${systemPrompt}\n\nPertanyaan Pengguna: ${userMessage}` }] }]
+              system_instruction: { parts: [{ text: systemPrompt }] },
+              contents: [
+                ...chatMessages
+                  .filter(msg => !msg.isLoading)
+                  .map(msg => ({
+                    role: msg.isBot ? 'model' : 'user',
+                    parts: [{ text: msg.text }]
+                  })),
+                { role: 'user', parts: [{ text: userMessage }] }
+              ]
             })
           });
 
