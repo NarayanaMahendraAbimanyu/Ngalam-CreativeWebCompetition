@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import DetailBudayaModal from "../components/DetailBudayaModal"; // Sesuaikan path jika berbeda
 import { budayaData } from "../components/budayaData"; // PENTING: Ganti ke "budayaData" jika nama filemu budayaData.js
 import Footer from "../components/footer"; // Footer jika ada, sesuaikan path
+import FotoUrban from "../assets/Harmoni_Urban.png"; // Ganti dengan path yang sesuai jika berbeda
+import FotoPeradaban from "../assets/Pusat_Peradaban.png"; // Ganti dengan path yang sesuai jika berbeda
 
 const heroSlides = [
   {
@@ -20,7 +22,7 @@ const heroSlides = [
     title: "Jatim Park",
     text: "Destinasi keluarga modern yang mempertemukan hiburan, edukasi, dan pengalaman rekreasi dalam satu kawasan wisata populer.",
     image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS84kpjwZror2tEI848qktme57AP_kN_yh-DsobuY1xKg&s=10",
   },
 ];
 
@@ -159,14 +161,14 @@ export default function Budaya() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl">
           <div className="relative h-[500px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Singhasari_temple.jpg/800px-Singhasari_temple.jpg" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Sejarah" />
+            <img src={FotoPeradaban} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Sejarah" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10">
               <h4 className="text-3xl font-bold text-white mb-2">Pusat Peradaban</h4>
               <p className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">Menyimpan kekayaan candi dan peninggalan prasejarah yang megah.</p>
             </div>
           </div>
           <div className="relative h-[500px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg">
-            <img src="https://images.unsplash.com/photo-1582650811985-e117498c474e?auto=format&fit=crop&w=800&q=80" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Urban" />
+            <img src={FotoUrban} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Urban" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10">
               <h4 className="text-3xl font-bold text-white mb-2">Harmoni Urban</h4>
               <p className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">Perpaduan tata kota yang dinamis dengan pelestarian budaya lokal.</p>

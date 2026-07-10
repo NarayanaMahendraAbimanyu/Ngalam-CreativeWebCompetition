@@ -202,21 +202,23 @@ const WisataPage = () => {
         `}
       </style>
       
-      <div id="main-cards-section" className="min-h-screen bg-[#F8F4E1] p-8 font-poppins">
+      {/* PERBAIKAN: Padding responsif p-4 untuk mobile, p-8 untuk desktop */}
+      <div id="main-cards-section" className="min-h-screen bg-[#F8F4E1] p-4 md:p-8 font-poppins">
         
         {/* Header Section */}
-        <div className="text-center mb-10 mt-24">
-          <h1 className="text-4xl font-extrabold text-[#543310] mb-4">
+        {/* PERBAIKAN: Margin top responsif agar tidak terlalu kosong di mobile */}
+        <div className="text-center mb-8 md:mb-10 mt-16 md:mt-24">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-[#543310] mb-4">
             <span className="text-[#128C3E]">Wisata</span> Malang
           </h1>
-          <p className="text-[#543310] max-w-2xl mx-auto opacity-80 text-sm md:text-base mb-8">
+          <p className="text-[#543310] max-w-2xl mx-auto opacity-80 text-sm md:text-base mb-8 px-2">
             Kota Malang merupakan kota terbesar kedua di Jawa Timur setelah Surabaya. Sebagai pusat ekonomi dan sosial di wilayah bagian selatan Jawa Timur.
           </p>
 
           {/* Fitur Search & Master Filter Dropdown */}
           <div className="max-w-4xl mx-auto relative z-20">
             {/* Main Bar (Search + Tombol Toggle Filter + Tombol Peta) */}
-            <div className="bg-[#543310] p-2 md:p-3 rounded-full shadow-xl flex flex-col md:flex-row items-center gap-2 md:gap-3">
+            <div className="bg-[#543310] p-2 md:p-3 rounded-3xl md:rounded-full shadow-xl flex flex-col md:flex-row items-center gap-2 md:gap-3">
               <input 
                 type="text"
                 placeholder="Cari destinasi wisata idamanmu di sini..."
@@ -224,26 +226,28 @@ const WisataPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-6 py-3 rounded-full bg-[#F8F4E1] text-[#543310] font-medium outline-none placeholder-[#543310]/60 shadow-inner flex-1"
               />
-              <div className="flex w-full md:w-auto gap-2">
+              {/* PERBAIKAN: Memungkinkan tombol bertumpuk rapi di layar super kecil */}
+              <div className="flex flex-col sm:flex-row w-full md:w-auto gap-2 mt-2 md:mt-0">
                 <button 
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className={`px-6 py-3 rounded-full font-bold transition-all flex items-center justify-center gap-2 flex-1 md:flex-none ${isFilterOpen ? 'bg-[#FFDD02] text-[#543310]' : 'bg-[#F8F4E1] text-[#543310] hover:bg-white'}`}
+                  className={`px-6 py-3 rounded-full font-bold transition-all flex items-center justify-center gap-2 w-full sm:w-auto md:flex-none ${isFilterOpen ? 'bg-[#FFDD02] text-[#543310]' : 'bg-[#F8F4E1] text-[#543310] hover:bg-white'}`}
                 >
                   ⚙️ Filter
                 </button>
                 <button
                   onClick={scrollToMap}
-                  className="bg-[#128C3E] text-[#F8F4E1] px-6 py-3 rounded-full hover:bg-green-700 shadow-md font-bold whitespace-nowrap flex items-center justify-center gap-2 flex-1 md:flex-none transition-colors"
+                  className="bg-[#128C3E] text-[#F8F4E1] px-6 py-3 rounded-full hover:bg-green-700 shadow-md font-bold whitespace-nowrap flex items-center justify-center gap-2 w-full sm:w-auto md:flex-none transition-colors"
                 >
-                  🗺️ Lihat Lewat Peta Interaktif
+                  🗺️ Lihat Lewat Peta
                 </button>
               </div>
             </div>
 
             {/* PANEL MEGA DROPDOWN FILTER */}
             {isFilterOpen && (
-              <div className="absolute top-20 md:top-24 left-0 right-0 bg-[#F8F4E1] border-2 border-[#543310] p-6 rounded-3xl shadow-2xl z-50 animate-in fade-in zoom-in duration-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+              /* PERBAIKAN: Menggunakan top-full dan mt-4 agar filter dropdown tidak tumpang tindih dengan input search di mobile */
+              <div className="absolute top-full mt-4 left-0 right-0 bg-[#F8F4E1] border-2 border-[#543310] p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-2xl z-50 animate-in fade-in zoom-in duration-200 text-left">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   
                   {/* Kolom 1 */}
                   <div className="space-y-4">
@@ -322,7 +326,8 @@ const WisataPage = () => {
 
         {/* Grid Cards Utama */}
         {currentData.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto z-0 relative">
+          /* PERBAIKAN: Gap direnggangkan sedikit lebih proporsional untuk tampilan mobile (gap-6) vs desktop (gap-8) */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto z-0 relative">
             {currentData.map((wisata, index) => (
               <div 
                 key={`${wisata.id}-${visibleCount}`} 
@@ -370,7 +375,7 @@ const WisataPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 max-w-xl mx-auto">
+          <div className="text-center py-12 max-w-xl mx-auto px-4">
             <p className="text-[#543310] font-bold text-lg opacity-70">
               Maaf, destinasi wisata yang kamu cari dengan kombinasi filter tersebut tidak dapat ditemukan. Coba ubah pencarian atau katagori filtermu.
             </p>
@@ -379,7 +384,7 @@ const WisataPage = () => {
 
         {/* Tombol Lihat Lebih Banyak / Lebih Sedikit */}
         {filteredWisata.length > 6 && (
-          <div className="flex justify-center items-center mt-12 mb-16">
+          <div className="flex justify-center items-center mt-10 md:mt-12 mb-12 md:mb-16">
             <button 
               onClick={handleToggleVisibleCount}
               className={`text-[#F8F4E1] font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-md flex items-center gap-2 transform active:scale-95 ${
@@ -406,18 +411,20 @@ const WisataPage = () => {
         {/* =========================================
             SECTION PETA GEOGRAFIS ASLI (LEAFLET) 
             ========================================= */}
-        <div id="interactive-map-section" className="mt-24 max-w-[1400px] mx-auto pt-14 border-t-2 border-[#543310]/10">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#543310] mb-3">Peta Asli Interaktif Malang Raya</h2>
+        {/* PERBAIKAN: Spasi atas yang responsif */}
+        <div id="interactive-map-section" className="mt-16 md:mt-24 max-w-[1400px] mx-auto pt-10 md:pt-14 border-t-2 border-[#543310]/10">
+          <div className="text-center mb-8 md:mb-10 px-2">
+            <h2 className="text-2xl md:text-4xl font-extrabold text-[#543310] mb-3">Peta Asli Interaktif Malang Raya</h2>
             <p className="text-[#543310]/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
               Geser, Zoom, dan Klik titik wilayah pada peta dunia nyata di bawah ini untuk melihat koleksi wisata memukau di daerah tersebut!
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start h-auto lg:h-[600px] w-full mb-16">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start h-auto lg:h-[600px] w-full mb-10 md:mb-16">
             
             {/* CONTAINER KIRI: REAL MAP LEAFLET */}
-            <div className="w-full lg:w-2/3 h-[450px] lg:h-full rounded-3xl overflow-hidden shadow-2xl relative border-4 border-[#543310] bg-[#E5E5E5]">
+            {/* PERBAIKAN: Penyesuaian tinggi map agar ideal saat dilihat di mobile (400px) */}
+            <div className="w-full lg:w-2/3 h-[400px] md:h-[450px] lg:h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl relative border-4 border-[#543310] bg-[#E5E5E5]">
               {/* Note: Coordinate berpusat di Kota Malang */}
               <MapContainer 
                 center={[-7.9666, 112.6326]} 
@@ -447,43 +454,44 @@ const WisataPage = () => {
             </div>
 
             {/* CONTAINER KANAN: PANEL GLASSMORPHISM LIST WISATA */}
-            <div className="w-full lg:w-1/3 bg-[#543310] p-6 rounded-3xl shadow-xl h-[450px] lg:h-full flex flex-col relative overflow-hidden">
+            {/* PERBAIKAN: Penyesuaian border radius panel dan proporsi tinggi mobile */}
+            <div className="w-full lg:w-1/3 bg-[#543310] p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-xl h-[450px] lg:h-full flex flex-col relative overflow-hidden">
               {/* Background Dekorasi Artistik agar tidak plain */}
               <div className="absolute top-[-50px] right-[-50px] w-48 h-48 bg-[#128C3E] rounded-full blur-3xl opacity-20 pointer-events-none"></div>
               <div className="absolute bottom-[-50px] left-[-50px] w-48 h-48 bg-[#FFDD02] rounded-full blur-3xl opacity-20 pointer-events-none"></div>
 
-              <div className="mb-6 border-b border-[#F8F4E1]/20 pb-4 relative z-10">
-                <span className="text-xs font-bold text-[#FFDD02] tracking-widest block mb-2 uppercase">WILAYAH TERPILIH PADA PETA</span>
-                <h3 className="text-2xl font-bold text-[#F8F4E1] flex items-center gap-2">
+              <div className="mb-4 md:mb-6 border-b border-[#F8F4E1]/20 pb-4 relative z-10">
+                <span className="text-[10px] md:text-xs font-bold text-[#FFDD02] tracking-widest block mb-2 uppercase">WILAYAH TERPILIH PADA PETA</span>
+                <h3 className="text-xl md:text-2xl font-bold text-[#F8F4E1] flex items-center gap-2">
                   📍 {selectedMapRegion}
                 </h3>
-                <p className="text-sm text-[#F8F4E1]/80 mt-1">Ditemukan {mapRegionData.length} destinasi unggulan</p>
+                <p className="text-xs md:text-sm text-[#F8F4E1]/80 mt-1">Ditemukan {mapRegionData.length} destinasi unggulan</p>
               </div>
 
               {/* Area Daftar Kartu Glassmorphism (Scrollable) */}
-              <div className="flex-1 overflow-y-auto pr-3 space-y-4 custom-scrollbar relative z-10 pb-4">
+              <div className="flex-1 overflow-y-auto pr-2 md:pr-3 space-y-3 md:space-y-4 custom-scrollbar relative z-10 pb-4">
                 {mapRegionData.map((wisata) => (
                   <div 
                     key={`map-list-${wisata.id}`}
                     onClick={() => setSelectedWisata(wisata)}
-                    className="glassmorphism hover:glassmorphism-dark p-4 rounded-2xl cursor-pointer transition-all duration-300 flex items-center gap-4 group hover:translate-x-1"
+                    className="glassmorphism hover:glassmorphism-dark p-3 md:p-4 rounded-xl md:rounded-2xl cursor-pointer transition-all duration-300 flex items-center gap-3 md:gap-4 group hover:translate-x-1"
                   >
                     {/* Thumbnail Bulat dengan Gambar Asli */}
-                    <div className="w-16 h-16 rounded-xl bg-[#128C3E] flex-shrink-0 flex items-center justify-center text-[8px] text-[#F8F4E1] font-bold text-center shadow-inner group-hover:scale-105 transition-transform overflow-hidden">
+                    <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-[#128C3E] flex-shrink-0 flex items-center justify-center text-[8px] text-[#F8F4E1] font-bold text-center shadow-inner group-hover:scale-105 transition-transform overflow-hidden">
                       <img src={wisata.image} alt={wisata.name} className="w-full h-full object-cover" />
                     </div>
                     
                     {/* Teks Informasi */}
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start mb-1">
-                        <h4 className="text-[#F8F4E1] font-bold text-sm truncate group-hover:text-[#FFDD02] transition-colors">{wisata.name}</h4>
+                        <h4 className="text-[#F8F4E1] font-bold text-xs md:text-sm truncate group-hover:text-[#FFDD02] transition-colors">{wisata.name}</h4>
                         <div className="flex items-center gap-0.5 flex-shrink-0 ml-2 bg-[#F8F4E1]/10 px-2 py-0.5 rounded-full">
-                          <span className="text-[#FFDD02] font-bold text-xs">{wisata.rate}</span>
-                          <span className="text-[#FFDD02] text-xs">★</span>
+                          <span className="text-[#FFDD02] font-bold text-[10px] md:text-xs">{wisata.rate}</span>
+                          <span className="text-[#FFDD02] text-[10px] md:text-xs">★</span>
                         </div>
                       </div>
-                      <span className="text-[10px] bg-[#128C3E]/50 text-[#F8F4E1] px-2 py-0.5 rounded-md inline-block mb-1">{wisata.kategori}</span>
-                      <p className="text-[#F8F4E1]/70 text-xs line-clamp-1 italic">
+                      <span className="text-[9px] md:text-[10px] bg-[#128C3E]/50 text-[#F8F4E1] px-2 py-0.5 rounded-md inline-block mb-1">{wisata.kategori}</span>
+                      <p className="text-[#F8F4E1]/70 text-[10px] md:text-xs line-clamp-1 italic">
                         {wisata.desc}
                       </p>
                     </div>
@@ -492,7 +500,7 @@ const WisataPage = () => {
                 
                 {mapRegionData.length === 0 && (
                   <div className="text-center mt-10 opacity-60">
-                    <p className="text-[#F8F4E1] text-sm">Belum ada destinasi di sistem untuk wilayah ini.</p>
+                    <p className="text-[#F8F4E1] text-xs md:text-sm">Belum ada destinasi di sistem untuk wilayah ini.</p>
                   </div>
                 )}
               </div>
