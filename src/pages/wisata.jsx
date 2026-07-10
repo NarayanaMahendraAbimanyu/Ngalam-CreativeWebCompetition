@@ -357,10 +357,11 @@ const WisataPage = () => {
                   {wisata.desc}
                 </p>
                 
-                <div className="mt-auto flex justify-center pb-2">
+                {/* PERBAIKAN: Menambahkan relative z-10 pointer-events-auto agar button tidak terhalangi kliknya */}
+                <div className="mt-auto flex justify-center pb-2 relative z-10 pointer-events-auto">
                   <button 
                     onClick={() => setSelectedWisata(wisata)}
-                    className="bg-[#128C3E] hover:bg-green-700 text-[#F8F4E1] font-semibold py-2 px-6 rounded-full text-sm flex items-center gap-2 transition-colors shadow-md"
+                    className="bg-[#128C3E] hover:bg-green-700 text-[#F8F4E1] font-semibold py-2 px-6 rounded-full text-sm flex items-center gap-2 transition-colors shadow-md cursor-pointer"
                   >
                     Lihat Selengkapnya <span className="font-bold">&gt;</span>
                   </button>
