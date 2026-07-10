@@ -393,20 +393,29 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                className="mt-8 flex items-center gap-4"
+                className="flex flex-wrap items-center gap-4 sm:gap-5 mt-8 sm:mt-10"
               >
+                {/* BUTTON 1 - SOLID GREEN PRIMARY */}
                 <button
                   onClick={scrollToSectionDua}
-                  className="bg-primary text-white font-poppins font-semibold px-6 py-3 lg:px-7 lg:py-3.5 rounded-full hover:bg-green-700 hover:-translate-y-1 transition-all shadow duration-200 text-sm md:text-base cursor-pointer relative z-20"
+                  className="bg-[#128C3E] text-white px-8 sm:px-10 h-14 sm:h-16 rounded-full text-base sm:text-lg font-bold flex items-center justify-center transition-transform hover:scale-105 shadow-lg shadow-[#128C3E]/30"
                 >
                   Tentang Malang
                 </button>
-                <a href="/wisata" className="bg-white text-[#14532d] font-bold py-3 md:py-4 px-6 md:px-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-50 transition-all flex items-center gap-3 border border-gray-100">
+
+                {/* BUTTON 2 - MODERN OUTLINE WITH DIAGONAL ARROW */}
+                <button
+                  onClick={() => navigate("/wisata")}
+                  className="bg-transparent border-[2.5px] border-white/80 text-[#543310] pl-8 sm:pl-10 pr-2 h-14 sm:h-16 rounded-full text-base sm:text-lg font-bold flex items-center justify-between gap-4 sm:gap-6 transition-all hover:bg-white/40 hover:scale-105 shadow-sm backdrop-blur-sm"
+                >
                   Lihat Wisata
-                  <span className="bg-[#14532d] text-white rounded-full p-1.5 flex items-center justify-center">
-                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                  </span>
-                </a>
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#128C3E] rounded-full flex items-center justify-center text-white shrink-0 shadow-md">
+                    {/* DIAGONAL TOP-RIGHT ARROW SVG */}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                    </svg>
+                  </div>
+                </button>
               </motion.div>
             </div>
 
