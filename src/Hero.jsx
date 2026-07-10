@@ -353,124 +353,138 @@ export default function Hero() {
           }}
         />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-8 lg:px-16 pt-32 lg:pt-52 pb-48 max-w-6xl mx-auto gap-10">
-          <div className="max-w-md w-full">
-            <motion.span
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-block text-sm font-poppins text-colortext px-4 py-3 rounded-full mb-2 shadow"
-            />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10 pt-32 lg:pt-40 pb-40 lg:pb-56">
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
-              <span className="text-[#4A2E1B] block">Explore the</span>
-              <span className="text-[#4A2E1B] block">City of</span>
-              <span className="text-[#14532d] block">Malang</span>
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="mt-5 text-colortext font-poppins text-sm md:text-base leading-relaxed"
-            >
-              Kota Malang dikenal sebagai pusat pendidikan, pariwisata, dan
-              sejarah di kawasan Malang Raya.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="mt-8 flex items-center gap-4"
-            >
-              <button
-                onClick={scrollToSectionDua}
-                className="bg-primary text-white font-poppins font-semibold px-6 py-3 lg:px-7 lg:py-3.5 rounded-full hover:bg-green-700 hover:-translate-y-1 transition-all shadow duration-200 text-sm md:text-base cursor-pointer relative z-20"
-              >
-                Tentang Malang
-              </button>
-              <a href="/wisata" className="bg-white text-[#14532d] font-bold py-3 md:py-4 px-6 md:px-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-50 transition-all flex items-center gap-3 border border-gray-100">
-                Lihat Wisata
-                <span className="bg-[#14532d] text-white rounded-full p-1.5 flex items-center justify-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </span>
-              </a>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="shrink-0 w-full lg:w-auto relative"
-          >
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="rounded-3xl p-3"
-              style={{ border: "2px solid rgba(18, 140, 62, 0.35)" }}
-            >
-              <img
-                src={malangCity}
-                alt="Malang City"
-                className="w-full lg:w-120 h-72 lg:h-80 object-cover rounded-2xl"
-                style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.12)" }}
+            {/* Left Text Column - Strictly locked to 45% width */}
+            <div className="w-full lg:w-[45%] flex flex-col items-start z-10">
+              <motion.span
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="inline-block text-sm font-poppins text-colortext px-4 py-3 rounded-full mb-2 shadow"
               />
-            </motion.div>
 
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{
-                duration: 3.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5,
-              }}
-              className="absolute -bottom-5 -left-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
-            >
-              <p className="text-xl font-bold font-poppins text-primary">
-                3,6 Juta
-              </p>
-              <p className="text-xs font-poppins text-gray-500">
-                Jiwa Penduduk
-              </p>
-            </motion.div>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+                  className="text-[#4A2E1B] mb-1 md:mb-2"
+                >Explore the</motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
+                  className="text-[#4A2E1B] whitespace-nowrap"
+                >City of <span className="text-[#14532d]">Malang</span></motion.div>
+              </h1>
 
-            <motion.div
-              animate={{ y: [0, -12, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1,
-              }}
-              className="absolute top-4 -right-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
-            >
-              <p className="text-xl font-bold font-poppins text-primary">50+</p>
-              <p className="text-xs font-poppins text-gray-500">
-                Destinasi Wisata
-              </p>
-            </motion.div>
+              <motion.p
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
+                className="mt-5 text-colortext font-poppins text-sm md:text-base leading-relaxed"
+              >
+                Kota Malang dikenal sebagai pusat pendidikan, pariwisata, dan
+                sejarah di kawasan Malang Raya.
+              </motion.p>
 
-            <motion.div
-              animate={{ y: [0, -9, 0] }}
-              transition={{
-                duration: 4.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.2,
-              }}
-              className="absolute -bottom-5 right-10 bg-white rounded-2xl px-4 py-2 shadow-lg"
-            >
-              <p className="text-xl font-bold font-poppins text-primary">30+</p>
-              <p className="text-xs font-poppins text-gray-500">Makanan Khas</p>
-            </motion.div>
-          </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="mt-8 flex items-center gap-4"
+              >
+                <button
+                  onClick={scrollToSectionDua}
+                  className="bg-primary text-white font-poppins font-semibold px-6 py-3 lg:px-7 lg:py-3.5 rounded-full hover:bg-green-700 hover:-translate-y-1 transition-all shadow duration-200 text-sm md:text-base cursor-pointer relative z-20"
+                >
+                  Tentang Malang
+                </button>
+                <a href="/wisata" className="bg-white text-[#14532d] font-bold py-3 md:py-4 px-6 md:px-8 rounded-full shadow-md hover:shadow-lg hover:bg-gray-50 transition-all flex items-center gap-3 border border-gray-100">
+                  Lihat Wisata
+                  <span className="bg-[#14532d] text-white rounded-full p-1.5 flex items-center justify-center">
+                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                  </span>
+                </a>
+              </motion.div>
+            </div>
+
+            {/* Right Image Column - Strictly locked to 50% width */}
+            <div className="w-full lg:w-[50%] relative z-10 flex justify-end">
+              <motion.div
+                initial={{ opacity: 0, x: 60 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+              >
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="rounded-3xl p-3"
+                  style={{ border: "2px solid rgba(18, 140, 62, 0.35)" }}
+                >
+                  <img
+                    src={malangCity}
+                    alt="Malang City"
+                    className="w-full lg:w-120 h-72 lg:h-80 object-cover rounded-2xl"
+                    style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.12)" }}
+                  />
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5,
+                  }}
+                  className="absolute -bottom-5 -left-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
+                >
+                  <p className="text-xl font-bold font-poppins text-primary">
+                    3,6 Juta
+                  </p>
+                  <p className="text-xs font-poppins text-gray-500">
+                    Jiwa Penduduk
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
+                  className="absolute top-4 -right-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
+                >
+                  <p className="text-xl font-bold font-poppins text-primary">50+</p>
+                  <p className="text-xs font-poppins text-gray-500">
+                    Destinasi Wisata
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [0, -9, 0] }}
+                  transition={{
+                    duration: 4.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.2,
+                  }}
+                  className="absolute -bottom-5 right-10 bg-white rounded-2xl px-4 py-2 shadow-lg"
+                >
+                  <p className="text-xl font-bold font-poppins text-primary">30+</p>
+                  <p className="text-xs font-poppins text-gray-500">Makanan Khas</p>
+                </motion.div>
+              </motion.div>
+            </div>
+
         </div>
 
         <div
-          className="relative w-full"
+          className="relative w-full translate-y-8 md:translate-y-12"
           style={{ height: "350px", marginTop: "-260px" }}
         >
           {clouds.map((c) => (
