@@ -72,20 +72,39 @@ export default function NgalamChat() {
 
     try {
       const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=' + resolvedKey;
+
+      const systemPrompt = `Anda adalah Tour Guide Virtual Kota Malang yang sangat sopan, ramah, dan asyik. Jawablah pertanyaan dengan jelas, padat, dan informatif. ATURAN MUTLAK: SANGAT DILARANG KERAS menggunakan format Markdown seperti tanda bintang (*), cetak tebal, hashtag, atau bullet points. Gunakan paragraf biasa.`;
+
+      const historyContents = chatMessages
+        .filter(msg => !msg.isLoading && msg.text && msg.text.trim().length > 0)
+        .map(msg => ({
+          role: msg.isBot ? 'model' : 'user',
+          parts: [{ text: msg.text }]
+        }));
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Anda adalah Tour Guide Virtual Kota Malang yang sangat sopan, ramah, dan asyik. Jawablah pertanyaan dengan jelas, padat, dan informatif. ATURAN MUTLAK: SANGAT DILARANG KERAS menggunakan format Markdown seperti tanda bintang (*), cetak tebal, hashtag, atau bullet points. Gunakan paragraf biasa.\n\nPertanyaan User: ${userMessage}`
-            }]
-          }]
+          system_instruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          contents: [
+            ...historyContents,
+            { role: 'user', parts: [{ text: userMessage }] }
+          ]
         })
       });
 
       if (!response.ok) {
-        throw new Error("API error");
+        let errorDetail = "";
+        try {
+          const errorData = await response.json();
+          errorDetail = errorData.error?.message || JSON.stringify(errorData);
+        } catch (jsonError) {
+          errorDetail = response.statusText;
+        }
+        throw new Error("API error: " + response.status + " " + errorDetail);
       }
 
       const data = await response.json();
@@ -94,7 +113,7 @@ export default function NgalamChat() {
 
     } catch (error) {
       console.error("DEBUG_API_ERROR:", error);
-      updateLastMessage("Maaf, layanan AI sedang mengalami gangguan. Silakan coba beberapa saat lagi.");
+      updateLastMessage("Maaf, layanan AI sedang mengalami gangguan. Silakan coba beberapa saat lagi. Detail: " + error.message, true);
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +154,7 @@ export default function NgalamChat() {
             placeholder="Tanya destinasi wisata..."
             className="flex-1 bg-gray-100 text-sm rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#14532d] disabled:bg-gray-200"
           />
-          <button type="submit" disabled={!chatInput.trim() || isLoading} className="bg-[#14532d] text-white p-2.5 rounded-full hover:bg-emerald-800 transition-colors disabled:bg-gray-400">
+          <button type="submit" disabled={isLoading || !chatInput.trim()} className="bg-[#14532d] text-white p-2.5 rounded-full hover:bg-emerald-800 transition-colors disabled:bg-gray-400">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
           </button>
         </form>

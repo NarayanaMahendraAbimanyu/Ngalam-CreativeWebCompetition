@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import NgalamChat from '../components/NgalamChat';
 // Logically separating data - adjust path based on your folder structure
 import { kulinerData, categories, regionGroups } from '../../kulinerData';
 
@@ -167,7 +166,6 @@ export default function Kuliner() {
 
       </main>
 
-      <NgalamChat/>
       <Footer/>
     </div>
   );
