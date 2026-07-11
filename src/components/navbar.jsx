@@ -150,7 +150,8 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed top-20 left-4 right-4 z-60 md:hidden bg-secondary rounded-3xl shadow-xl overflow-hidden"
+            /* PERUBAHAN: bg-secondary diganti menjadi bg-white agar warna popup putih solid */
+            className="fixed top-20 left-4 right-4 z-60 md:hidden bg-white rounded-3xl shadow-xl overflow-hidden"
           >
             <div className="flex flex-col py-2">
               {menuItems.map((item, i) => (

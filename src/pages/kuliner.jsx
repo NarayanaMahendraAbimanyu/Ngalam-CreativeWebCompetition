@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 // Logically separating data - adjust path based on your folder structure
 import { kulinerData, categories, regionGroups } from '../../kulinerData';
@@ -28,7 +27,7 @@ export default function Kuliner() {
 
   return (
     <div className="min-h-screen bg-[#F8F4E1] font-['Poppins',sans-serif] flex flex-col text-[#543310]">
-      <Navbar/>
+      
 
       {/* MAIN LAYOUT: PORSCHE AESTHETIC - NGALAM SCALED */}
       <main className="flex-grow max-w-[1300px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 flex flex-col lg:flex-row gap-10 lg:gap-14">
