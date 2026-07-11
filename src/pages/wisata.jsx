@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { wisataData } from '../components/wisataData'; // Sesuaikan path jika perlu
 import DetailWisataModal from '../components/DetailWisataModal'; // Sesuaikan path jika perlu
-import FooterWisata from '../components/footer'; // Import komponen Footer Baru
+import Footer from '../components/Footer'; // Import komponen Footer Baru
 
 // Import Leaflet untuk Peta Asli
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
@@ -521,7 +521,7 @@ const WisataPage = () => {
       </div>
 
       {/* Footer Wisata Profesional & Modern Terpisah */}
-      <FooterWisata />
+      <Footer/>
     </>
   );
 };

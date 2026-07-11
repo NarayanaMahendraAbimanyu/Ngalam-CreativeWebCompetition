@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import DetailBudayaModal from "../components/DetailBudayaModal"; // Sesuaikan path jika berbeda
 import { budayaData } from "../components/budayaData"; // PENTING: Ganti ke "budayaData" jika nama filemu budayaData.js
-import Footer from "../components/footer"; // Footer jika ada, sesuaikan path
+import Footer from "../components/Footer"; // Footer jika ada, sesuaikan path
 import FotoUrban from "../assets/Harmoni_Urban.png"; // Ganti dengan path yang sesuai jika berbeda
 import FotoPeradaban from "../assets/Pusat_Peradaban.png"; // Ganti dengan path yang sesuai jika berbeda
 
@@ -39,6 +39,11 @@ const budayaLetterImages = [
 const fallbackImg = "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=1920";
 
 export default function Budaya() {
+  // === FITUR SCROLL TO TOP ===
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedBudaya, setSelectedBudaya] = useState(null);
 
@@ -114,11 +119,15 @@ export default function Budaya() {
             <div className="relative h-[350px] md:h-[450px] w-full overflow-hidden rounded-[2rem] border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl">
               <img key={currentSlide} src={currentHero.image} alt={currentHero.title} className="h-full w-full object-cover transition-opacity duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-              <button type="button" onClick={goToPreviousSlide} className="absolute left-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/80 hover:bg-emerald-500 text-white shadow-lg transition-colors">‹</button>
-              <button type="button" onClick={goToNextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/80 hover:bg-emerald-500 text-white shadow-lg transition-colors">›</button>
-              <div className="absolute bottom-5 left-5 right-5 md:right-auto md:max-w-[85%] rounded-2xl border border-white/15 bg-black/40 p-5 backdrop-blur-md">
-                <p className="text-2xl font-black text-white mb-1">{currentHero.title}</p>
-                <p className="text-sm text-gray-300 leading-relaxed">{currentHero.text}</p>
+              
+              {/* TOMBOL PANAH: Diubah posisi top-nya khusus mobile agar tidak tertutup teks box */}
+              <button type="button" onClick={goToPreviousSlide} className="absolute left-3 md:left-4 top-[35%] md:top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full bg-emerald-500/80 hover:bg-emerald-500 text-white shadow-lg transition-colors text-xl md:text-2xl">‹</button>
+              <button type="button" onClick={goToNextSlide} className="absolute right-3 md:right-4 top-[35%] md:top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full bg-emerald-500/80 hover:bg-emerald-500 text-white shadow-lg transition-colors text-xl md:text-2xl">›</button>
+              
+              {/* TEXT BOX: Ukuran font dan padding diperkecil khusus di mobile agar tidak terlalu memakan tinggi gambar */}
+              <div className="absolute bottom-4 md:bottom-5 left-4 md:left-5 right-4 md:right-auto md:max-w-[85%] rounded-2xl border border-white/15 bg-black/40 p-4 md:p-5 backdrop-blur-md">
+                <p className="text-xl md:text-2xl font-black text-white mb-1">{currentHero.title}</p>
+                <p className="text-xs md:text-sm text-gray-300 leading-relaxed">{currentHero.text}</p>
               </div>
             </div>
           </div>
