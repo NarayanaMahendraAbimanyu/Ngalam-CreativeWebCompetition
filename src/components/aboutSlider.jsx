@@ -10,7 +10,7 @@ const slides = [
     id: 1,
     image: slide1,
     icon: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 md:w-[30px] md:h-[30px] shrink-0">
         <rect
           x="3"
           y="3"
@@ -76,7 +76,7 @@ const slides = [
     id: 2,
     image: slide2,
     icon: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 md:w-[30px] md:h-[30px] shrink-0">
         <rect
           x="4"
           y="2"
@@ -147,7 +147,7 @@ const slides = [
     id: 3,
     image: slide3,
     icon: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 md:w-[30px] md:h-[30px] shrink-0">
         <rect
           x="4"
           y="2"
@@ -256,21 +256,13 @@ export default function AboutSlider() {
   const slide = slides[index];
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto px-10 md:px-14">
+    <div className="relative w-full max-w-3xl mx-auto px-8 md:px-14">
       <div className="relative flex items-center">
         <button
           onClick={prev}
-          onClick={prev}
-          style={{
-            width: "56px",
-            height: "56px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          className="absolute -left-10 md:-left-12 z-10 rounded-full bg-primary text-secondary/80 hover:text-white hover:bg-green-700 scale-90 hover:scale-95 active:scale-80 transition-all duration-400 shadow-lg"
+          className="w-10 h-10 md:w-[56px] md:h-[56px] flex items-center justify-center absolute -left-5 sm:-left-6 md:-left-12 z-10 rounded-full bg-primary text-secondary/80 hover:text-white hover:bg-green-700 scale-90 hover:scale-95 active:scale-80 transition-all duration-400 shadow-lg"
         >
-          <ChevronLeft size={25} strokeWidth={5} />
+          <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" strokeWidth={5} />
         </button>
 
         <div
@@ -278,8 +270,7 @@ export default function AboutSlider() {
           style={{ border: "2px solid rgba(18, 140, 62, 0.4)", padding: "8px" }}
         >
           <div
-            className="relative w-full overflow-hidden rounded-2xl"
-            style={{ aspectRatio: "4/3" }}
+            className="relative w-full overflow-hidden rounded-2xl aspect-[4/5] sm:aspect-square md:aspect-[4/3]"
           >
             <AnimatePresence custom={dir} initial={false}>
               <motion.div
@@ -303,8 +294,7 @@ export default function AboutSlider() {
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
-                  className="absolute bottom-2 left-2 right-2 md:bottom-auto md:right-auto md:top-1/2 md:-translate-y-1/2 md:left-5 border-primary border-2 bg-secondary rounded-xl shadow-xl md:max-w-65"
-                  style={{ padding: "12px 20px" }}
+                  className="absolute bottom-4 left-4 right-4 md:bottom-auto md:right-auto md:top-1/2 md:-translate-y-1/2 md:left-5 border-primary border-2 bg-secondary/95 md:bg-secondary backdrop-blur-sm md:backdrop-blur-none rounded-xl shadow-xl md:max-w-65 p-3 sm:p-4 md:py-[12px] md:px-[20px]"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span className="shrink-0">{slide.icon}</span>
@@ -312,7 +302,7 @@ export default function AboutSlider() {
                       {slide.title}
                     </h3>
                   </div>
-                  <p className="text-[10px] leading-relaxed md:text-sm md:leading-relaxed font-poppins text-gray-600 text-left">
+                  <p className="text-[11px] sm:text-xs leading-relaxed md:text-sm md:leading-relaxed font-poppins text-gray-600 text-left">
                     {slide.desc}
                   </p>
                 </motion.div>
@@ -323,20 +313,13 @@ export default function AboutSlider() {
 
         <button
           onClick={next}
-          style={{
-            width: "56px",
-            height: "56px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          className="absolute -right-10 md:-right-12 z-10 rounded-full bg-primary hover:bg-green-700 text-secondary/80 hover:text-white scale-90 hover:scale-95 active:scale-80 transition-all duration-400 shadow-lg"
+          className="w-10 h-10 md:w-[56px] md:h-[56px] flex items-center justify-center absolute -right-5 sm:-right-6 md:-right-12 z-10 rounded-full bg-primary hover:bg-green-700 text-secondary/80 hover:text-white scale-90 hover:scale-95 active:scale-80 transition-all duration-400 shadow-lg"
         >
-          <ChevronRight size={25} strokeWidth={5} />
+          <ChevronRight className="w-6 h-6 md:w-8 md:h-8" strokeWidth={5} />
         </button>
       </div>
 
-      <div className="mt-4 flex justify-center gap-1">
+      <div className="mt-4 md:mt-6 flex justify-center gap-1">
         {slides.map((_, i) => (
           <button
             key={i}

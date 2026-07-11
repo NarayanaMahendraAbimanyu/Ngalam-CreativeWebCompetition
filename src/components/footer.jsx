@@ -10,14 +10,13 @@ const FooterWisata = () => {
       return;
     }
 
-    const emailTujuan = 'masnopal2008@gmail.com';
-    const subject = encodeURIComponent('Masukan & Ide Gokil untuk Web Wisata Malang');
-    const body = encodeURIComponent(
+    const nomorWA = '6289512477330';
+    const pesanTeks = encodeURIComponent(
       `Halo Tim Developer Wisata Malang,\n\nBerikut adalah masukan/saran segar dari pengguna untuk pengembangan web:\n\n"${saran}"\n\nSalam Hangat!`
     );
 
-    // Memicu pembukaan mail client bawaan secara otomatis direct ke email masnopal2008@gmail.com
-    window.location.href = `mailto:${emailTujuan}?subject=${subject}&body=${body}`;
+    // Memicu pembukaan tab baru secara otomatis direct ke WhatsApp
+    window.open(`https://wa.me/${nomorWA}?text=${pesanTeks}`, '_blank');
     
     // Reset form field setelah mengirim
     setSaran('');
@@ -52,18 +51,23 @@ const FooterWisata = () => {
           <h3 className="text-lg font-bold border-b-2 border-[#128C3E] pb-2 inline-block">Jelajahi</h3>
           <ul className="space-y-2.5 text-sm font-medium">
             <li>
-              <a href="#main-cards-section" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
+              <a href="/wisata" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
                 <span>🔍</span> Cari Destinasi
               </a>
             </li>
             <li>
-              <a href="#main-cards-section" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
-                <span>🏷️</span> Ragam Kategori
+              <a href="/budaya" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
+                <span>🏷️</span> Jelajah Budaya
               </a>
             </li>
             <li>
-              <a href="#interactive-map-section" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
+              <a href="/wisata#interactive-map-section" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
                 <span>🗺️</span> Peta Geografis Interaktif
+              </a>
+            </li>
+            <li>
+              <a href="/kuliner" className="opacity-80 hover:opacity-100 hover:text-[#FFDD02] transition-colors flex items-center gap-2">
+                <span>🍽️</span> Ragam Kuliner
               </a>
             </li>
           </ul>

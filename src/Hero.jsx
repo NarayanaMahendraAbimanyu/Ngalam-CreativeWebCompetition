@@ -420,11 +420,12 @@ export default function Hero() {
             </div>
 
             {/* Right Image Column - Strictly locked to 50% width */}
-            <div className="w-full lg:w-[50%] relative z-10 flex justify-end">
+            <div className="w-full lg:w-[50%] relative z-10 flex justify-end mt-12 lg:mt-0">
               <motion.div
                 initial={{ opacity: 0, x: 60 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7, delay: 0.3 }}
+                className="max-w-full"
               >
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
@@ -440,6 +441,7 @@ export default function Hero() {
                   />
                 </motion.div>
 
+                {/* Floating Badges diganti menjadi hidden lg:block agar tidak overflow/jelek di mobile */}
                 <motion.div
                   animate={{ y: [0, -8, 0] }}
                   transition={{
@@ -448,7 +450,7 @@ export default function Hero() {
                     ease: "easeInOut",
                     delay: 0.5,
                   }}
-                  className="absolute -bottom-5 -left-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
+                  className="hidden lg:block absolute -bottom-5 -left-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
                 >
                   <p className="text-xl font-bold font-poppins text-primary">
                     3,6 Juta
@@ -466,7 +468,7 @@ export default function Hero() {
                     ease: "easeInOut",
                     delay: 1,
                   }}
-                  className="absolute top-4 -right-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
+                  className="hidden lg:block absolute top-4 -right-6 bg-white rounded-2xl px-4 py-2 shadow-lg"
                 >
                   <p className="text-xl font-bold font-poppins text-primary">50+</p>
                   <p className="text-xs font-poppins text-gray-500">
@@ -482,7 +484,7 @@ export default function Hero() {
                     ease: "easeInOut",
                     delay: 0.2,
                   }}
-                  className="absolute -bottom-5 right-10 bg-white rounded-2xl px-4 py-2 shadow-lg"
+                  className="hidden lg:block absolute -bottom-5 right-10 bg-white rounded-2xl px-4 py-2 shadow-lg"
                 >
                   <p className="text-xl font-bold font-poppins text-primary">30+</p>
                   <p className="text-xs font-poppins text-gray-500">Makanan Khas</p>
@@ -492,9 +494,10 @@ export default function Hero() {
 
         </div>
 
+        {/* -mt-[80px] sm:-mt-[150px] md:-mt-[260px] ditambahkan untuk meresponsifkan margin agar awan tidak bertumpuk menutup konten di mobile */}
         <div
-          className="relative w-full translate-y-8 md:translate-y-12"
-          style={{ height: "350px", marginTop: "-260px" }}
+          className="relative w-full translate-y-8 md:translate-y-12 -mt-[80px] sm:-mt-[150px] md:-mt-[260px]"
+          style={{ height: "350px" }}
         >
           {clouds.map((c) => (
             <motion.img
@@ -651,16 +654,17 @@ export default function Hero() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 flex flex-col gap-8 h-[450px]">
+            {/* Mengganti h-[450px] menjadi h-auto lg:h-[450px] agar di mode mobile card anak tidak tergencet/gepeng */}
+            <div className="lg:col-span-5 flex flex-col gap-6 lg:gap-8 h-auto lg:h-[450px]">
               <div className="flex-1 flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div className="w-full sm:w-2/5 h-40 sm:h-full overflow-hidden">
+                <div className="w-full sm:w-2/5 h-48 sm:h-full overflow-hidden shrink-0">
                   <img
                     src="https://malangkota.go.id/wp-content/uploads/2025/11/IMG_20251108_081545-370x280.jpg"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt="Perpamsi"
                   />
                 </div>
-                <div className="w-full sm:w-3/5 p-6 flex flex-col justify-center">
+                <div className="w-full sm:w-3/5 p-4 sm:p-6 flex flex-col justify-center">
                   <p className="text-gray-400 text-xs font-bold mb-2">Jul, 7 2026</p>
                   <h3 className="text-lg font-bold text-[#14532d] mb-4 leading-snug">
                     Penghargaan Perpamsi Terbaik
@@ -678,14 +682,14 @@ export default function Hero() {
               </div>
 
               <div className="flex-1 flex flex-col sm:flex-row bg-white rounded-2xl overflow-hidden shadow-lg group">
-                <div className="w-full sm:w-2/5 h-40 sm:h-full overflow-hidden">
+                <div className="w-full sm:w-2/5 h-48 sm:h-full overflow-hidden shrink-0">
                   <img
                     src="https://malangkota.go.id/wp-content/uploads/2025/11/detikJatim-Award-2025.-370x280.jpg"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt="Inovasi"
                   />
                 </div>
-                <div className="w-full sm:w-3/5 p-6 flex flex-col justify-center">
+                <div className="w-full sm:w-3/5 p-4 sm:p-6 flex flex-col justify-center">
                   <p className="text-gray-400 text-xs font-bold mb-2">Jul, 7 2026</p>
                   <h3 className="text-lg font-bold text-[#14532d] mb-4 leading-snug">
                     Inovasi Layanan Publik Unggulan
@@ -756,20 +760,20 @@ export default function Hero() {
 
       <div className="w-full bg-[#F8F4E1] px-8 md:px-24 pb-24">
         <div className="max-w-7xl mx-auto bg-[#14532d] rounded-[2rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
-          <div className="p-12 md:p-16 flex-1 flex flex-col justify-center">
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-10 leading-tight">Temukan hal baru<br/>anda di Malang</h2>
-            <div className="flex flex-col gap-5 text-emerald-50 text-lg font-medium mb-12">
+          <div className="p-8 sm:p-12 md:p-16 flex-1 flex flex-col justify-center">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-8 sm:mb-10 leading-tight">Temukan hal baru<br/>anda di Malang</h2>
+            <div className="flex flex-col gap-4 sm:gap-5 text-emerald-50 text-base sm:text-lg font-medium mb-10 sm:mb-12">
               <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Eksplorasi Digital Tanpa Batas</div>
               <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Peta Wisata Interaktif Real-time</div>
               <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Tour Guide AI Personal (Ngalam Chat)</div>
               <div className="flex items-center gap-4"><div className="bg-white text-[#14532d] rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div> Rincian Biaya & Akses Termudah</div>
             </div>
             <div className="flex flex-wrap gap-4">
-              <a href="/wisata" className="bg-[#F8F4E1] text-[#14532d] font-bold py-3 px-8 rounded-full hover:bg-white transition-colors shadow-md text-center">Cari destinasimu</a>
-              <a href="/budaya" className="bg-transparent border-2 border-[#F8F4E1] text-[#F8F4E1] font-bold py-3 px-8 rounded-full hover:bg-white/10 transition-colors text-center">Cari di malang</a>
+              <a href="/wisata" className="w-full sm:w-auto bg-[#F8F4E1] text-[#14532d] font-bold py-3 px-8 rounded-full hover:bg-white transition-colors shadow-md text-center">Cari destinasimu</a>
+              <a href="/budaya" className="w-full sm:w-auto bg-transparent border-2 border-[#F8F4E1] text-[#F8F4E1] font-bold py-3 px-8 rounded-full hover:bg-white/10 transition-colors text-center">Cari di malang</a>
             </div>
           </div>
-          <div className="w-full lg:w-[45%] h-[400px] lg:h-auto">
+          <div className="w-full lg:w-[45%] h-[300px] sm:h-[400px] lg:h-auto">
             <img src="https://tugujatim.id/wp-content/uploads/2021/09/333ddf83-dbe8-44fb-b02c-1f02d1f8ac73.jpg" alt="Eksplorasi Malang" className="w-full h-full object-cover" />
           </div>
         </div>
