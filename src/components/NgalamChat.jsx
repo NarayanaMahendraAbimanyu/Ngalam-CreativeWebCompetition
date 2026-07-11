@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "ngalam_chat_history";
 const API_KEY_STORAGE = "ngalam_api_key";
@@ -7,7 +7,47 @@ const WELCOME_MESSAGE = {
   isBot: true,
 };
 
-const GEMINI_MODEL = "gemini-2.0-flash";
+const getLocalResponse = (query) => {
+  const q = query.toLowerCase();
+
+  // Priority 1: Identity & Greetings (anda siapa, kamu siapa, halo)
+  if (q.includes("siapa") || q.includes("nama") || q.includes("bot") || q.includes("ai")) {
+    return "Halo! Perkenalkan, saya adalah Asisten Virtual Tour Guide Ngalam. Saya dirancang khusus untuk memandu Anda menjelajahi keindahan destinasi wisata, kelezatan kuliner, dan kekayaan budaya di Kota Malang dan sekitarnya. Apa yang bisa saya bantu hari ini?";
+  }
+  else if (q.match(/\b(halo|hai|pagi|siang|sore|malam|hi)\b/)) {
+    return "Halo! Selamat datang di layanan Ngalam Chat. Saya adalah Asisten Virtual Pariwisata Anda. Ada informasi mengenai wisata, kuliner, atau kebudayaan Kota Malang yang ingin Anda eksplorasi hari ini?";
+  }
+
+  // Priority 2: Top Recommendations (paling, rekomendasi, terbaik, hits)
+  else if (q.includes("paling") || q.includes("rekomendasi") || q.includes("terbaik") || q.includes("hits") || q.includes("wajib")) {
+    return "Untuk rekomendasi wisata terbaik di Malang, Anda wajib mengunjungi kawasan Gunung Bromo untuk pemandangan alam yang spektakuler, Jatim Park Group di Batu untuk wisata edukasi dan keluarga, serta Kampung Warna-warni Jodipan untuk spot foto yang sangat ikonis. Apakah Anda lebih menyukai wisata alam atau wisata taman hiburan?";
+  }
+
+  // Priority 3: Culinary & Food (kuliner, makan, enak, lapar, kafe)
+  else if (q.includes("kuliner") || q.includes("makan") || q.includes("enak") || q.includes("lapar") || q.includes("minum") || q.includes("bakso")) {
+    return "Tentu, Kota Malang adalah surga bagi para pencinta kuliner! Hidangan legendaris yang sangat saya rekomendasikan adalah Bakso President yang otentik, Rawon Brintik dengan kuah rempah pekat, serta Cwie Mie Malang. Jangan lupa juga mencicipi sejuknya udara Malang sambil menikmati kopi di berbagai kafe estetis di daerah Sudimoro atau Suhat.";
+  }
+
+  // Priority 4: Nature & Beaches (alam, pantai, gunung, air terjun)
+  else if (q.includes("pantai") || q.includes("gunung") || q.includes("alam") || q.includes("air terjun") || q.includes("coban")) {
+    return "Kekayaan alam Malang sangat luar biasa. Di wilayah Malang Selatan, Anda bisa menemukan deretan pantai eksotis seperti Pantai Balekambang dan Pantai Goa Cina. Untuk wisata pegunungan dan air terjun, kawasan Batu dan Pujon menawarkan Air Terjun Coban Rondo yang memukau serta paralayang di Gunung Banyak.";
+  }
+
+  // Priority 5: History, Culture, and Education (sejarah, budaya, candi, museum)
+  else if (q.includes("sejarah") || q.includes("budaya") || q.includes("candi") || q.includes("museum")) {
+    return "Malang memiliki nilai sejarah yang sangat dalam. Anda dapat menelusuri masa kejayaan kerajaan masa lampau di Candi Singosari, Candi Badut, atau mempelajari sejarah militer di Museum Brawijaya. Malang juga sangat terkenal dengan peninggalan arsitektur kolonial Belanda yang masih terawat dengan baik di sepanjang Jalan Ijen.";
+  }
+
+  // Priority 6: Generic Malang Catch-all
+  else if (q.includes("malang") || q.includes("kota")) {
+    return "Kota Malang merupakan kota terbesar kedua di Jawa Timur yang terkenal dengan udaranya yang sejuk dan lingkungannya yang asri. Dikenal sebagai Kota Pendidikan dan Kota Pariwisata, Malang selalu menawarkan kenangan indah bagi siapa saja yang berkunjung. Ada hal spesifik yang ingin Anda ketahui?";
+  }
+
+  // Default Fallback - Polite and professional guiding
+  else {
+    return "Mohon maaf, pertanyaan Anda mungkin terlalu spesifik dan belum ada dalam catatan saya. Namun, sebagai Tour Guide Anda, saya siap memberikan informasi seputar tempat wisata hits, rekomendasi kuliner legendaris, dan panduan budaya di Kota Malang. Boleh saya bantu dengan merekomendasikan destinasi wisata populer untuk Anda?";
+  }
+};
 
 const getInitialMessages = () => {
   if (typeof window === "undefined") return [WELCOME_MESSAGE];
@@ -28,8 +68,9 @@ export default function NgalamChat() {
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState(() => getInitialMessages());
   const [apiKey, setApiKey] = useState(
-    () => (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GEMINI_API_KEY : '') || localStorage.getItem(API_KEY_STORAGE) || ''
+    () => (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_API_KEY : '') || localStorage.getItem(API_KEY_STORAGE) || ''
   );
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -53,89 +94,63 @@ export default function NgalamChat() {
     }
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!chatInput.trim() || !apiKey) return;
+    const userMessage = chatInput.trim();
+    if (!userMessage) return;
 
-    const userMessage = chatInput;
+    setChatMessages(prev => [...prev, { text: userMessage, isBot: false }, { text: "...", isBot: true, isLoading: true }]);
+    setChatInput('');
+    setIsLoading(true);
 
-    // Instantly append user message and the animated pulse placeholder
-    setChatMessages(prev => [
-      ...prev,
-      { text: userMessage, isBot: false },
-      { text: "...", isBot: true, isLoading: true }
-    ]);
-    setChatInput("");
+    const updateLastMessage = (reply, isError = false) => {
+      setChatMessages(prev => {
+        const updated = [...prev];
+        if (updated.length > 0 && updated[updated.length - 1].isLoading) {
+          updated[updated.length - 1] = { text: reply, isBot: true, isLoading: false, isError };
+        } else {
+          updated.push({ text: reply, isBot: true, isError });
+        }
+        return updated;
+      });
+    };
+
+    const resolvedKey = import.meta.env.VITE_API_KEY || localStorage.getItem(API_KEY_STORAGE);
+
+    if (!resolvedKey) {
+      updateLastMessage("API Key belum terkonfigurasi. Silakan periksa file .env Anda.");
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      const systemPrompt = `Anda adalah Tour Guide Virtual Kota Malang yang sangat sopan, ramah, dan asyik. Jawablah pertanyaan user dengan jelas, padat, dan informatif selayaknya mengobrol santai. ATURAN MUTLAK: SANGAT DILARANG KERAS menggunakan format Markdown seperti tanda bintang (*), cetak tebal, hashtag, atau bullet points. Gunakan paragraf biasa yang mengalir natural dan mudah dibaca.`;
-
-      let aiResponse = "";
-      const models = ["gemini-2.5-flash-lite", "gemini-2.5-flash", GEMINI_MODEL, "gemini-2.0-flash-lite"];
-      let lastFetchError = null;
-
-      for (const model of models) {
-        try {
-          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              system_instruction: { parts: [{ text: systemPrompt }] },
-              contents: [
-                ...chatMessages
-                  .filter(msg => !msg.isLoading)
-                  .map(msg => ({
-                    role: msg.isBot ? 'model' : 'user',
-                    parts: [{ text: msg.text }]
-                  })),
-                { role: 'user', parts: [{ text: userMessage }] }
-              ]
-            })
-          });
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
-          }
-
-          const data = await response.json();
-          const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (textResponse) {
-            aiResponse = textResponse;
-            break;
-          } else {
-            throw new Error("Response was received but text content was empty/null.");
-          }
-        } catch (err) {
-          lastFetchError = err;
-        }
-      }
-
-      if (!aiResponse) {
-        throw lastFetchError || new Error("Failed to generate response from all attempted Gemini models.");
-      }
-
-      setChatMessages(prev => {
-        const updated = [...prev];
-        if (updated.length > 0 && updated[updated.length - 1].isLoading) {
-          updated[updated.length - 1] = { text: aiResponse, isBot: true, isLoading: false };
-        }
-        return updated;
+      const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': resolvedKey },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `Anda adalah Tour Guide Virtual Kota Malang yang sangat sopan, ramah, dan asyik. Jawablah pertanyaan dengan jelas, padat, dan informatif. ATURAN MUTLAK: SANGAT DILARANG KERAS menggunakan format Markdown seperti tanda bintang (*), cetak tebal, hashtag, atau bullet points. Gunakan paragraf biasa.\n\nPertanyaan User: ${userMessage}`
+            }]
+          }]
+        })
       });
+
+      if (!response.ok) {
+        throw new Error("API error");
+      }
+
+      const data = await response.json();
+      const botReply = data.candidates[0].content.parts[0].text;
+      updateLastMessage(botReply);
 
     } catch (error) {
-      console.error("Chatbot Error:", error);
-      setChatMessages(prev => {
-        const updated = [...prev];
-        if (updated.length > 0 && updated[updated.length - 1].isLoading) {
-          updated[updated.length - 1] = {
-            text: "Mohon maaf, koneksi jaringan saya ke server pusat sedang mengalami gangguan singkat. Sila kirim ulang pertanyaan Anda ya, Sam. 🙏",
-            isBot: true,
-            isLoading: false
-          };
-        }
-        return updated;
-      });
+      console.error("DEBUG_API_ERROR:", error);
+      const localReply = getLocalResponse(userMessage);
+      updateLastMessage(localReply);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -189,16 +204,16 @@ export default function NgalamChat() {
         </div>
 
         {/* Input Area */}
-        <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-gray-100 flex gap-2 items-center">
+        <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-gray-100 flex gap-2 items-center">
           <input
             type="text"
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
-            disabled={!apiKey}
+            disabled={!apiKey || isLoading}
             placeholder={!apiKey ? "Menunggu API Key..." : "Tanya destinasi wisata..."}
             className="flex-1 bg-gray-100 text-sm rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#14532d] disabled:bg-gray-200"
           />
-          <button type="submit" disabled={!apiKey || !chatInput.trim()} className="bg-[#14532d] text-white p-2.5 rounded-full hover:bg-emerald-800 transition-colors disabled:bg-gray-400">
+          <button type="submit" disabled={!apiKey || !chatInput.trim() || isLoading} className="bg-[#14532d] text-white p-2.5 rounded-full hover:bg-emerald-800 transition-colors disabled:bg-gray-400">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
           </button>
         </form>
